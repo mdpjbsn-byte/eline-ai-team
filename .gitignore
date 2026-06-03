@@ -1,0 +1,18 @@
+# ความลับ — ห้ามขึ้น GitHub เด็ดขาด
+**/notify.py
+*.env
+.env
+**/secrets*
+**/*token*
+**/*credential*
+
+# ระบบ
+.DS_Store
+__pycache__/
+*.pyc
+
+# ไฟล์ใหญ่ที่ gen ใหม่ได้
+team/team-roster-mobile.html
+.mcp.json
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELINÉ — เข้าสู่ระบบ</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg0:#070a18; --ink:#eef1ff; --muted:#9aa0d4; --gold:#f5c451; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Chakra Petch',sans-serif;background:radial-gradient(circle at 50% -10%,#16204a,var(--bg0) 60%);color:var(--ink);min-height:100vh;padding:46px 22px 70px;}
+  header{text-align:center;margin-bottom:40px;}
+  header .crest{font-family:'Cinzel',serif;font-size:13px;letter-spacing:7px;color:var(--gold);text-transform:uppercase;}
+  header h1{font-size:40px;font-weight:700;margin:8px 0;letter-spacing:1px;}
+  header .sub{color:var(--muted);font-size:14px;letter-spacing:1px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:26px;max-width:1280px;margin:0 auto;}
+  .card{position:relative;border-radius:20px;overflow:hidden;background:#0e1430;border:1px solid rgba(255,255,255,.07);box-shadow:0 10px 34px rgba(0,0,0,.45);transition:transform .25s,box-shadow .25s;cursor:default;}
+  .card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.6);}
+  .imgwrap{position:relative;aspect-ratio:3/4;overflow:hidden;}
+  .imgwrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+  .card:hover .imgwrap img{transform:scale(1.05);}
+  .imgwrap::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,#0e1430 6%,rgba(14,20,48,.4) 38%,transparent 65%);}
+  .accent{position:absolute;top:0;left:0;right:0;height:5px;z-index:2;}
+  .badge{position:absolute;top:12px;right:12px;z-index:2;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:20px;background:rgba(0,0,0,.55);border:1px solid rgba(245,196,81,.4);color:var(--gold);backdrop-filter:blur(4px);}
+  .info{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:16px 18px 18px;}
+  .name{font-size:24px;font-weight:700;line-height:1;}
+  .role{font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+  .duty{font-size:12.5px;margin-top:8px;line-height:1.45;color:#cdd2f5;}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:46px;line-height:1.7;}
+
+  #gate{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#16204a,#070a18 70%);}
+  .box{background:#0e1430;border:1px solid rgba(245,196,81,.25);border-radius:20px;padding:40px 34px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+  .box .crest{font-family:'Cinzel',serif;font-size:12px;letter-spacing:6px;color:#f5c451;text-transform:uppercase;}
+  .box h2{font-size:22px;margin:10px 0 4px;}
+  .box p{color:#9aa0d4;font-size:12px;margin-bottom:22px;}
+  .box input{width:100%;padding:13px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.12);background:#0a0f24;color:#eef1ff;font-family:inherit;font-size:15px;text-align:center;letter-spacing:2px;}
+  .box input:focus{outline:none;border-color:#f5c451;}
+  .box button{width:100%;margin-top:14px;padding:13px;border:none;border-radius:11px;cursor:pointer;font-family:inherit;font-weight:600;font-size:15px;color:#1a1340;background:linear-gradient(135deg,#f5c451,#ffe093);}
+  .err{color:#ff8a8a;font-size:12px;margin-top:12px;min-height:16px;}
+  #content{display:none;}
+</style></head>
+<body>
+<div id="gate">
+  <div class="box">
+    <div class="crest">Eliné OS</div>
+    <h2>🔒 เข้าสู่ระบบ</h2>
+    <p>ใส่รหัสผ่านเพื่อดูแฟ้มทีม</p>
+    <input id="pw" type="password" placeholder="รหัสผ่าน" onkeydown="if(event.key==='Enter')check()">
+    <button onclick="check()">เข้าสู่ระบบ</button>
+    <div class="err" id="err"></div>
+  </div>
+</div>
+<div id="content">
+<header>
+  <div class="crest">Eliné Operating System</div>
+  <h1>🗂️ ทีมของเรา</h1>
+  <div class="sub">10 สมาชิก · แต่ละคนเก่งเรื่องเดียว · Jarvis แจกงาน</div>
+</header>
+
+<div class="grid">
+
+  <div class="card"><div class="accent" style="background:#2E5E8C"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Jarvis.png" alt="Jarvis">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Jarvis</div><div class="role">หัวหน้าทีม · Orchestrator</div><div class="duty">รับงานจากเจ้านาย แจกให้ทีม รวมผล รายงาน</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#1E4E8C"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Luna.png" alt="Luna">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Luna</div><div class="role">นักวางแผน · Planner</div><div class="duty">วางแผน วาง roadmap คิด idea card</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#5B9BD5"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Rowan.png" alt="Rowan">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Rowan</div><div class="role">นักวิจัย · Researcher</div><div class="duty">วิจัย หาข้อมูล ผ่าน NotebookLM</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#7B4F9E"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Simon.png" alt="Simon">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Simon</div><div class="role">นักเขียน · Writer</div><div class="duty">เขียน caption / copy / สคริปต์ / บทความ</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#E8843C"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Nick.png" alt="Nick">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Nick</div><div class="role">ดีไซเนอร์ · Art Director</div><div class="duty">ออกแบบกราฟิก / layout / thumbnail / Canva brief</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#C0392B"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Laurent%20.png" alt="Laurent">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Laurent</div><div class="role">ผู้ตรวจ · Editor / QA</div><div class="duty">ตรวจคุณภาพงาน + audit งานวิจัย</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#3FA86B"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Dr.Frey.png" alt="Frey">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Frey</div><div class="role">คุณหมอเฟ · Doctor / Coach</div><div class="duty">ดูแลสุขภาพกาย-ใจ ความเครียด สมดุลชีวิต</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#1ABC9C"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Henry.png" alt="Henry">
+      <span class="badge">HAIKU</span>
+      <div class="info"><div class="name">Henry</div><div class="role">ผู้ถอดเทป · Transcriber</div><div class="duty">ถอดเทปคลิป/เสียงเป็นข้อความ</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#5E3A87"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Vince.png" alt="Vince">
+      <span class="badge">SONNET</span>
+      <div class="info"><div class="name">Vince</div><div class="role">นักสกัด Insight</div><div class="duty">สกัด insight จาก transcript</div></div></div></div>
+
+  <div class="card"><div class="accent" style="background:#0E8A6E"></div>
+    <div class="imgwrap"><img src="Pic%20agent/Nicole.png" alt="Nicole">
+      <span class="badge">HAIKU</span>
+      <div class="info"><div class="name">Nicole</div><div class="role">บรรณารักษ์ · Librarian</div><div class="duty">เก็บความรู้เข้า KB ดูแล index</div></div></div></div>
+
+</div>
+
+<footer>
+  ELINÉ OS · แฟ้มทีมส่วนตัวของเจ้านาย · เปิดดูในเครื่องเท่านั้น<br>
+  อัปเดต: 2026-06-03 · รูปสไตล์ Black Desert · ออกแบบโดย Nick
+</footer>
+</div>
+<script>
+  // 🔑 เปลี่ยนรหัสตรงนี้ได้เลย
+  const PASSWORD = "eline2026";
+  function check(){
+    const v=document.getElementById('pw').value;
+    if(v===PASSWORD){
+      document.getElementById('gate').style.display='none';
+      document.getElementById('content').style.display='block';
+    }else{
+      document.getElementById('err').textContent='รหัสผ่านไม่ถูกต้อง';
+      document.getElementById('pw').value='';
+    }
+  }
+</script>
+</body></html>
