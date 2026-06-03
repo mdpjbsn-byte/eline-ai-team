@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ELINÉ — ทีมของเรา</title>
+<script>
+(function(){
+  var k = sessionStorage.getItem('eline_auth');
+  if(k !== '55555'){
+    var p = prompt('รหัสผ่าน:');
+    if(p !== '55555'){ document.write('<h2 style="color:#fff;background:#070a18;height:100vh;display:flex;align-items:center;justify-content:center;margin:0;font-family:sans-serif">❌ รหัสไม่ถูกต้อง</h2>'); document.close(); return; }
+    sessionStorage.setItem('eline_auth','55555');
+  }
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{ --bg0:#070a18; --ink:#eef1ff; --muted:#9aa0d4; --gold:#f5c451; }
