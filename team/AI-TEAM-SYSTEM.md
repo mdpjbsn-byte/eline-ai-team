@@ -2,10 +2,11 @@
 _เรื่องทีม/ระบบ — อยู่ใน Eline ไม่ใช่ Obsidian (Obsidian = ความรู้/งานเท่านั้น)_
 _อัปเดต: 2026-06-03_
 
-## ทีม 10 ตัว (.claude/agents/)
+## ทีม 11 ตัว (.claude/agents/)
 | ชื่อ | หน้าที่ | model |
 |---|---|---|
 | Jarvis | หัวหน้า แจกงาน ไม่ทำเอง · สุภาพ อบอุ่น อธิบายละเอียด | Sonnet |
+| Alfred | พ่อบ้าน · routine, ของใช้/บ้าน, สุขภาพ/กิน, เงินส่วนตัว/bills | Sonnet |
 | Luna | วางแผน + idea card (ทำก่อน Rowan ทุกครั้ง) | Sonnet |
 | Rowan | นักวิจัย ใช้ NotebookLM เป็นเครื่องมือ (วิเคราะห์เอง) | Sonnet |
 | Simon | เขียน copy/สคริปต์/บทความ | Sonnet |

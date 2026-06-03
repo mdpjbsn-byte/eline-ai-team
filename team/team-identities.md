@@ -56,6 +56,9 @@ full character visible, wide angle
 **10. 📚 Nicole — บรรณารักษ์** · เขียวมรกต `#0E8A6E`
 > A calm 25-year-old woman, librarian and knowledge keeper, serene tidy expression, gentle composed look, neat professional blouse elegant minimal style, emerald-green color tone, organized graceful presence, [CORE]
 
+**11. 🎩 Alfred — พ่อบ้าน** · ทองเก่า-ครีม `#C8A96E / #F5ECD7`
+> A distinguished slim 58-year-old English butler, long silver swept-back hair, warm yet authoritative expression, impeccable black tailcoat with white waistcoat and gloves, gold pocket watch chain, antique gold and cream color tone, composed dignified presence, [CORE]
+
 ---
 
 ## ⭐ PROMPT พร้อมวาง (ก๊อปทั้งก้อน → กด generate · สัดส่วน 2:3)
