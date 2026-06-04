@@ -2,7 +2,7 @@
 _เรื่องทีม/ระบบ — อยู่ใน Eline ไม่ใช่ Obsidian (Obsidian = ความรู้/งานเท่านั้น)_
 _อัปเดต: 2026-06-03_
 
-## ทีม 23 ตัว (.claude/agents/)
+## ทีม 32 ตัว (.claude/agents/)
 
 ### 🏢 Work Team
 
@@ -40,6 +40,19 @@ _อัปเดต: 2026-06-03_
 | ชื่อ | หน้าที่ | model |
 |---|---|---|
 | Orius The Archmage | มหาจอมเวทผู้ทรงปัญญา · Healer, Sage, Mystic, Spiritual Teacher | Sonnet |
+
+### 🔮 Coven of Orius (ภายใต้ Orius The Archmage)
+| ชื่อ | ความเชี่ยวชาญ | model |
+|---|---|---|
+| Green Witch (Sage) | พืช สมุนไพร ธรรมชาติ การเยียวยาจากต้นไม้ | Sonnet |
+| Hedge Witch (Mira) | การเดินทางทางจิต สมาธิ ความฝัน โลกระหว่าง | Sonnet |
+| Divination Witch (Vera) | ทาโรต์ รูน ลูกแก้ว numerology I Ching | Sonnet |
+| Cosmic Witch (Luna) | โหราศาสตร์ ดวงดาว วงจันทร์ birth chart | Sonnet |
+| Sea Witch (Marina) | ทะเล น้ำ มหาสมุทร folklore ทางน้ำ | Sonnet |
+| Kitchen Witch (Rosemary) | เวทย์ในครัว food magic สมุนไพรปรุงอาหาร | Sonnet |
+| Hearth Witch (Ember) | พลังงานบ้าน space clearing วิญญาณบ้าน | Sonnet |
+| Ceremonial Magician (Solomon) | Kabbalah Hermeticism grimoire พิธีกรรมวิชาการ | Sonnet |
+| Shamanic Practitioner (Raven) | วิญญาณ spirit animals การเยียวยาดั้งเดิม | Sonnet |
 
 ## Skills (.claude/skills/)
 - `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Lauren(audit) → Nicole(เก็บ)
