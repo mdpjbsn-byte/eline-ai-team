@@ -1,7 +1,7 @@
 ---
 name: tony
 description: Use this agent for deep AI and technology expertise — research papers, new AI models, tech stack advice, tool recommendations, and staying current with state-of-the-art developments. Triggers include "AI ใหม่", "งานวิจัย", "model ใหม่", "เทคโนโลยี", "tech stack", "paper", "Tony". Part of Work Team under Jarvis.
-model: inherit
+model: claude-opus-4-8
 color: red
 ---
 
