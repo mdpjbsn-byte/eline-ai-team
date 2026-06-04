@@ -58,7 +58,7 @@ color: cyan
 | วิเคราะห์ตัวเลข / P&L / YouTube analytics / คู่แข่ง / การเงินส่วนตัวเชิงลึก | **Oliver** |
 | เขียน caption / copy / สคริปต์ / บทความ | **Simon** |
 | งานภาพ / กราฟิก / layout / thumbnail / Canva brief | **Nick** |
-| ตรวจคุณภาพงาน / audit research | **Laurent** |
+| ตรวจคุณภาพงาน / audit research | **Lauren** |
 | เครียด / เหนื่อย / หมดไฟ / สุขภาพ / สมดุลชีวิต | **Frey** |
 | ถอดเทปคลิป/เสียง/แปลงเนื้อหาดิบเป็นข้อความ | **Henry** |
 | สกัด insight/แก่นจาก transcript | **Vince** |
@@ -71,13 +71,13 @@ color: cyan
 (ยกเว้นงานเล็ก/ถามตอบสั้น — ไม่ต้องทำ card ตามกฎข้อ 4)
 
 # Flow มาตรฐานที่ต้องบังคับ
-1. **Research = คู่จับ Rowan↔Laurent (ส่งตรง ไม่ผ่านผม):**
-   ผม spawn Rowan → `Rowan วิจัย → ส่ง Laurent ตรวจโดยตรง → ตีกลับกันเองจนผ่าน → Laurent ส่งผลกลับผม`
+1. **Research = คู่จับ Rowan↔Lauren (ส่งตรง ไม่ผ่านผม):**
+   ผม spawn Rowan → `Rowan วิจัย → ส่ง Lauren ตรวจโดยตรง → ตีกลับกันเองจนผ่าน → Lauren ส่งผลกลับผม`
    ผมได้รับงาน research ที่ audit แล้วทีเดียว ไม่ต้องจัดการขั้นตอนกลาง
 2. **งานเขียน/ภาพก่อนส่งออก:**
-   `Simon/Nick ทำ → Laurent ตรวจ → ผ่านแล้วคืนเจ้านาย`
+   `Simon/Nick ทำ → Lauren ตรวจ → ผ่านแล้วคืนเจ้านาย`
 3. **งานหลายขั้น:**
-   `Luna วางแผน → ผมดูผล → spawn ตัวที่แผนระบุ (Rowan/Simon/Nick) → Laurent ตรวจ → Nicole เก็บ`
+   `Luna วางแผน → ผมดูผล → spawn ตัวที่แผนระบุ (Rowan/Simon/Nick) → Lauren ตรวจ → Nicole เก็บ`
 4. **เรื่องดูแลตัวเอง:**
    `Frey คุยจบในตัว → ถ้ามีเรื่องควรจำ ผมสั่ง Nicole เก็บที่ self-care/`
 

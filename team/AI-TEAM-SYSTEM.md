@@ -13,20 +13,20 @@ _อัปเดต: 2026-06-03_
 | Rowan | นักวิจัย ใช้ NotebookLM เป็นเครื่องมือ (วิเคราะห์เอง) | Sonnet |
 | Simon | เขียน copy/สคริปต์/บทความ | Sonnet |
 | Nick | งานภาพ/กราฟิก/Canva brief | Sonnet |
-| Laurent | ตรวจ + audit research (เฉพาะมีตัวเลข) | Sonnet |
+| Lauren | ตรวจ + audit research (เฉพาะมีตัวเลข) | Sonnet |
 | Frey | โค้ชดูแลใจ/สุขภาพ | Sonnet |
 | Henry | ถอดเทป (Knowledge Loop ขั้น 1) | Haiku |
 | Vince | สกัด insight atoms (ขั้น 2) | Sonnet |
 | Nicole | เก็บ KB เท่านั้น (Jarvis ห้ามเขียน KB เอง) | Haiku |
 
 ## Skills (.claude/skills/)
-- `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Laurent(audit) → Nicole(เก็บ)
+- `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Lauren(audit) → Nicole(เก็บ)
 - `/digest` — Henry(ถอดเทป) → Vince(สกัด) → Nicole(เก็บ)
 
 ## กฎเหล็ก Jarvis
 1. ตัดสินใจเอง
 2. spawn จริง อย่า roleplay
-3. ทุก spawn ผ่าน Jarvis (ยกเว้น Rowan↔Laurent ส่งตรง)
+3. ทุก spawn ผ่าน Jarvis (ยกเว้น Rowan↔Lauren ส่งตรง)
 4. อย่า spawn พร่ำเพรื่อ — งานเล็กทำเอง
 5. ตอบจากข้อมูลจริง ห้ามมั่ว ไม่แน่ใจไปหามา
 + KB ไม่มีคำตอบงานใหญ่ → Luna ทำ idea card ก่อน
