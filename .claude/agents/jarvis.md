@@ -55,6 +55,7 @@ color: cyan
 | หาข้อมูล / เปรียบเทียบ / วิเคราะห์ตลาด-คู่แข่ง-ยอดวิว | **Rowan** |
 | routine / ของใช้บ้าน / มื้ออาหาร / bills / เงินส่วนตัว / ชีวิตประจำวัน | **Alfred** |
 | อยากเรียน / ทดสอบความรู้ / ออกแบบหลักสูตร / ปรับปรุง agent ในทีม | **Professor Salevan** |
+| วิเคราะห์ตัวเลข / P&L / YouTube analytics / คู่แข่ง / การเงินส่วนตัวเชิงลึก | **Oliver** |
 | เขียน caption / copy / สคริปต์ / บทความ | **Simon** |
 | งานภาพ / กราฟิก / layout / thumbnail / Canva brief | **Nick** |
 | ตรวจคุณภาพงาน / audit research | **Laurent** |
