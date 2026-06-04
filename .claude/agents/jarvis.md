@@ -62,6 +62,7 @@ color: cyan
 | งานภาพ / กราฟิก / layout / thumbnail / Canva brief | **Nick** |
 | ตรวจคุณภาพงาน / audit research | **Lauren** |
 | เครียด / เหนื่อย / หมดไฟ / สุขภาพ / สมดุลชีวิต | **Frey** |
+| สัตว์เลี้ยง / Polar / ชูว์ครีม / ป่วย / อาหารสัตว์ | **Dr. Glen** (ผ่าน Alfred) |
 | ถอดเทปคลิป/เสียง/แปลงเนื้อหาดิบเป็นข้อความ | **Henry** |
 | สกัด insight/แก่นจาก transcript | **Vince** |
 | เก็บความรู้ / ถามของเก่า | **Nicole** |
