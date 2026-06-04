@@ -41,8 +41,8 @@ full character visible, wide angle
 **5. 🎨 Nick — ดีไซเนอร์** · ส้ม `#E8843C`
 > A creative 28-year-old man, art director, expressive artistic look with playful confidence, trendy artist-casual outfit, orange color tone, stylish creative presence, [CORE]
 
-**6. ✅ Laurent — ผู้ตรวจ** · แดง `#C0392B`
-> A composed 33-year-old woman, editor, calm focused gentle gaze, refined expression, elegant dark formal blouse, red color tone, meticulous graceful presence, [CORE]
+**6. ✅ Lauren — ผู้ตรวจ** · แดง `#C0392B`
+> A sharp-eyed 33-year-old man, strict editor, precise focused intense gaze, serious refined expression, immaculate dark formal shirt buttoned neat, red color tone, meticulous authoritative presence, [CORE]
 
 **7. 🩺 Frey — คุณหมอเฟ** · เขียว `#3FA86B`
 > A warm 30-year-old woman doctor, gentle caring expression, kind reassuring smile, white medical coat over scrubs with a stethoscope around the neck, green color tone, compassionate trustworthy presence, [CORE]
@@ -73,7 +73,7 @@ full character visible, wide angle
 
 **Nick:** Black Desert Online game CG style, high-fidelity 3D character render, semi-realistic stylized game art, Unreal Engine cinematic render, not a photograph — full body shot of a creative 28-year-old man art director standing confidently with a stylus in hand, expressive artistic look, idealized stylized features, flawless CG skin, trendy artist-casual outfit, in a vibrant design studio with colorful artwork and screens, dramatic cinematic lighting, orange color palette, ultra detailed, 8k, masterpiece, trending on ArtStation, full character visible, wide angle
 
-**Laurent:** Black Desert Online game CG style, high-fidelity 3D character render, semi-realistic stylized game art, Unreal Engine cinematic render, not a photograph — full body shot of a composed 33-year-old woman editor standing with arms lightly crossed, calm focused gentle expression, idealized beautiful stylized features, flawless CG skin, elegant dark formal blouse, in a sleek review room with multiple monitors and clean modern desk, dramatic cinematic lighting, deep red color palette, ultra detailed, 8k, masterpiece, trending on ArtStation, full character visible, wide angle
+**Lauren:** Black Desert Online game CG style, high-fidelity 3D character render, semi-realistic stylized game art, Unreal Engine cinematic render, not a photograph — full body shot of a sharp-eyed 33-year-old man editor standing with arms crossed and a precise serious expression, idealized stylized features, flawless CG skin, immaculate dark formal shirt, in a sleek review room with multiple monitors and clean modern desk, dramatic cinematic lighting, deep red color palette, ultra detailed, 8k, masterpiece, trending on ArtStation, full character visible, wide angle
 
 **Frey:** Black Desert Online game CG style, high-fidelity 3D character render, semi-realistic stylized game art, Unreal Engine cinematic render, not a photograph — full body shot of a warm 30-year-old woman doctor standing with a gentle reassuring smile, white medical coat over scrubs with a stethoscope around her neck, idealized beautiful stylized features, flawless CG skin, in a clean modern clinic with soft natural light and plants, dramatic cinematic lighting, green color palette, ultra detailed, 8k, masterpiece, trending on ArtStation, full character visible, wide angle
 

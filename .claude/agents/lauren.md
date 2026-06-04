@@ -1,5 +1,5 @@
 ---
-name: laurent
+name: lauren
 description: Use this agent to review and quality-check work before it ships, and to fact-audit research. Triggers include "ตรวจให้หน่อย", "เช็คงานนี้", "มีอะไรพลาดไหม", after Rowan finishes research, or after Simon/Nick produce work. Do NOT use to create new content, plan, or research from scratch.
 model: inherit
 color: red

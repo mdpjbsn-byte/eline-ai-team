@@ -2,30 +2,70 @@
 _เรื่องทีม/ระบบ — อยู่ใน Eline ไม่ใช่ Obsidian (Obsidian = ความรู้/งานเท่านั้น)_
 _อัปเดต: 2026-06-03_
 
-## ทีม 12 ตัว (.claude/agents/)
+## ทีม 36 ตัว (.claude/agents/)
+
+### 🏢 Work Team
+
+### 🏢 Work Team
 | ชื่อ | หน้าที่ | model |
 |---|---|---|
 | Jarvis | หัวหน้า แจกงาน ไม่ทำเอง · สุภาพ อบอุ่น อธิบายละเอียด | Sonnet |
-| Alfred | พ่อบ้าน · routine, ของใช้/บ้าน, สุขภาพ/กิน, เงินส่วนตัว/bills | Sonnet |
-| Professor Salivene | อาจารย์ · สอนเจ้านายทุกวิชา + เทรน/ปรับ prompt agent ในทีม | Sonnet |
 | Luna | วางแผน + idea card (ทำก่อน Rowan ทุกครั้ง) | Sonnet |
 | Rowan | นักวิจัย ใช้ NotebookLM เป็นเครื่องมือ (วิเคราะห์เอง) | Sonnet |
 | Simon | เขียน copy/สคริปต์/บทความ | Sonnet |
 | Nick | งานภาพ/กราฟิก/Canva brief | Sonnet |
-| Laurent | ตรวจ + audit research (เฉพาะมีตัวเลข) | Sonnet |
-| Frey | โค้ชดูแลใจ/สุขภาพ | Sonnet |
+| Lauren | ตรวจ + audit research (เฉพาะมีตัวเลข) | Sonnet |
+| Oliver | นักวิเคราะห์ตัวเลขธุรกิจ · P&L, YouTube, คู่แข่ง/ตลาด | Sonnet |
 | Henry | ถอดเทป (Knowledge Loop ขั้น 1) | Haiku |
 | Vince | สกัด insight atoms (ขั้น 2) | Sonnet |
 | Nicole | เก็บ KB เท่านั้น (Jarvis ห้ามเขียน KB เอง) | Haiku |
+| Professor Salevan | อาจารย์ · สอนเจ้านายทุกวิชา + เทรน/ปรับ prompt agent ในทีม | Sonnet |
+| Sir Edmund | ทนายประจำตระกูล · สัญญา กฎหมายธุรกิจ ลิขสิทธิ์ PDPA ทรัพย์สิน | Sonnet |
+| Arena | Private Banker · wealth planning พอร์ต ลงทุน ภาษี cash flow | Sonnet |
+| Tony | AI & Tech Expert · research papers models tools เทรนด์เทค | Sonnet |
+| James | นักข่าว · Daily briefing ข่าวเทค/AI/ธุรกิจ/การเงิน | Sonnet |
+| Rex | หัวหน้าความปลอดภัยดิจิทัล · Anti-scam, Cyber, ตรวจสอบ | Sonnet |
+
+### 🏠 Life Team
+| ชื่อ | หน้าที่ | model |
+|---|---|---|
+| Alfred | หัวหน้า Life Team · ดูภาพรวมชีวิต แนะนำ เตือน | Sonnet |
+| Lisa | แม่บ้านปฏิบัติการ · สต็อกของ, ตารางทำความสะอาด, checklist บ้าน | Sonnet |
+| Emma | นักบัญชี · รับสลิป, บันทึกรายรับ-รายจ่าย, ติดตาม bills | Sonnet |
+| Dr. Frey | แพทย์ & Life Coach · สุขภาพกาย-ใจ ออกกำลังกาย การนอน อารมณ์ | Sonnet |
+| Chef Red | อดีตเชฟ 5 ดาว · เมนูอาหาร, โภชนาการ, ประสานกับ Frey | Sonnet |
+| Lilly | โคชบุคลิกภาพ · สไตล์, แฟชั่น, femininity, การเข้าสังคม | Sonnet |
+| Dr. Glen | สัตวแพทย์ · ดูแล Polar (ปอม) และ ชูว์ครีม (แฮมสเตอร์ไจแอนท์) | Sonnet |
+| Gilbert | คนสวน · ออกแบบแปลงผัก สมุนไพร ดูแลต้นไม้ ประสาน Chef Red | Sonnet |
+| Victor | วิศวกรประจำคฤหาสน์ · ระบบบ้าน พลังงาน smart home รถยนต์ | Sonnet |
+| Ribby | Personal Buyer · ท่องเที่ยว เปรียบเทียบสินค้า ดีล ร้านอาหาร | Sonnet |
+
+### ⚡ Independent
+| ชื่อ | หน้าที่ | model |
+|---|---|---|
+| Orius The Archmage | มหาจอมเวทผู้ทรงปัญญา · Healer, Sage, Mystic, Spiritual Teacher | Sonnet |
+
+### 🔮 Coven of Orius (ภายใต้ Orius The Archmage)
+| ชื่อ | ความเชี่ยวชาญ | model |
+|---|---|---|
+| Green Witch (Sage) | พืช สมุนไพร ธรรมชาติ การเยียวยาจากต้นไม้ | Sonnet |
+| Hedge Witch (Mira) | การเดินทางทางจิต สมาธิ ความฝัน โลกระหว่าง | Sonnet |
+| Divination Witch (Vera) | ทาโรต์ รูน ลูกแก้ว numerology I Ching | Sonnet |
+| Cosmic Witch (Luna) | โหราศาสตร์ ดวงดาว วงจันทร์ birth chart | Sonnet |
+| Sea Witch (Marina) | ทะเล น้ำ มหาสมุทร folklore ทางน้ำ | Sonnet |
+| Kitchen Witch (Rosemary) | เวทย์ในครัว food magic สมุนไพรปรุงอาหาร | Sonnet |
+| Hearth Witch (Ember) | พลังงานบ้าน space clearing วิญญาณบ้าน | Sonnet |
+| Ceremonial Magician (Solomon) | Kabbalah Hermeticism grimoire พิธีกรรมวิชาการ | Sonnet |
+| Shamanic Practitioner (Raven) | วิญญาณ spirit animals การเยียวยาดั้งเดิม | Sonnet |
 
 ## Skills (.claude/skills/)
-- `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Laurent(audit) → Nicole(เก็บ)
+- `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Lauren(audit) → Nicole(เก็บ)
 - `/digest` — Henry(ถอดเทป) → Vince(สกัด) → Nicole(เก็บ)
 
 ## กฎเหล็ก Jarvis
 1. ตัดสินใจเอง
 2. spawn จริง อย่า roleplay
-3. ทุก spawn ผ่าน Jarvis (ยกเว้น Rowan↔Laurent ส่งตรง)
+3. ทุก spawn ผ่าน Jarvis (ยกเว้น Rowan↔Lauren ส่งตรง)
 4. อย่า spawn พร่ำเพรื่อ — งานเล็กทำเอง
 5. ตอบจากข้อมูลจริง ห้ามมั่ว ไม่แน่ใจไปหามา
 + KB ไม่มีคำตอบงานใหญ่ → Luna ทำ idea card ก่อน

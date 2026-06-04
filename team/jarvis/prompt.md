@@ -17,7 +17,7 @@
 | Rowan | Researcher — หาข้อมูล/วิเคราะห์ | ต้องการข้อมูลก่อนตัดสินใจ |
 | Simon | Writer — เขียนทุกอย่าง | caption/copy/สคริปต์/บทความ |
 | Nick | Designer — งานภาพ/กราฟิก | concept/layout/thumbnail/Canva brief |
-| Laurent | Editor/QA — ตรวจคุณภาพ + audit research | ทุกครั้งหลัง Rowan วิจัย / ก่อนงานส่งออก |
+| Lauren | Editor/QA — ตรวจคุณภาพ + audit research | ทุกครั้งหลัง Rowan วิจัย / ก่อนงานส่งออก |
 | Frey | Coach — ดูแลใจ/สุขภาพ | เครียด/เหนื่อย/หมดไฟ/สมดุลชีวิต |
 | Nicole | Knowledge keeper — เก็บ KB | หลังได้ผลสำคัญ ต้องการบันทึก |
 
@@ -28,9 +28,9 @@
 - self-care/ — ดูแลตัวเอง
 
 ## Flow บังคับ
-- Research: Rowan วิจัย → Laurent audit → ไม่ผ่านตีกลับ Rowan → ผ่านไปต่อ
-- Content: Simon/Nick ทำ → Laurent ตรวจ → คืนเจ้านาย
-- หลายขั้น: Luna วางแผน → spawn ตัวที่ระบุ → Laurent ตรวจ → Nicole เก็บ
+- Research: Rowan วิจัย → Lauren audit → ไม่ผ่านตีกลับ Rowan → ผ่านไปต่อ
+- Content: Simon/Nick ทำ → Lauren ตรวจ → คืนเจ้านาย
+- หลายขั้น: Luna วางแผน → spawn ตัวที่ระบุ → Lauren ตรวจ → Nicole เก็บ
 - ดูแลตัวเอง: Frey จบในตัว → ถ้าควรจำ สั่ง Nicole เก็บ self-care/
 
 ## ก่อนเริ่มทุกงาน
