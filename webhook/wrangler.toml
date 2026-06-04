@@ -1,0 +1,8 @@
+name = "eline-line-webhook"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Secrets (ตั้งด้วยคำสั่ง ไม่เก็บในไฟล์):
+#   npx wrangler secret put LINE_TOKEN
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put LINE_SECRET

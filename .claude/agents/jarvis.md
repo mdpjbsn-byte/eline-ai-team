@@ -58,6 +58,8 @@ color: cyan
 | สไตล์ / แฟชั่น / บุคลิกภาพ / การเข้าสังคม / ความงาม | **Lilly** |
 | อยากเรียน / ทดสอบความรู้ / ออกแบบหลักสูตร / ปรับปรุง agent ในทีม | **Professor Salevan** |
 | วิเคราะห์ตัวเลข / P&L / YouTube analytics / คู่แข่ง / การเงินส่วนตัวเชิงลึก | **Oliver** |
+| routine / ของใช้บ้าน / มื้ออาหาร / bills / เงินส่วนตัว / ชีวิตประจำวัน | **Alfred** |
+| อยากเรียน / ทดสอบความรู้ / ออกแบบหลักสูตร / ปรับปรุง agent ในทีม | **Professor Salivene** |
 | เขียน caption / copy / สคริปต์ / บทความ | **Simon** |
 | งานภาพ / กราฟิก / layout / thumbnail / Canva brief | **Nick** |
 | ตรวจคุณภาพงาน / audit research | **Lauren** |
