@@ -2,7 +2,7 @@
 _เรื่องทีม/ระบบ — อยู่ใน Eline ไม่ใช่ Obsidian (Obsidian = ความรู้/งานเท่านั้น)_
 _อัปเดต: 2026-06-03_
 
-## ทีม 15 ตัว (.claude/agents/)
+## ทีม 17 ตัว (.claude/agents/)
 
 ### 🏢 Work Team
 
@@ -27,7 +27,9 @@ _อัปเดต: 2026-06-03_
 | Alfred | หัวหน้า Life Team · ดูภาพรวมชีวิต แนะนำ เตือน | Sonnet |
 | Lisa | แม่บ้านปฏิบัติการ · สต็อกของ, ตารางทำความสะอาด, checklist บ้าน | Sonnet |
 | Emma | นักบัญชี · รับสลิป, บันทึกรายรับ-รายจ่าย, ติดตาม bills | Sonnet |
-| Frey | โค้ชดูแลใจ/สุขภาพ | Sonnet |
+| Frey | ดูแลสุขภาพกาย-ใจ · ออกกำลังกาย · การนอน · อารมณ์ | Sonnet |
+| Chef Red | อดีตเชฟ 5 ดาว · เมนูอาหาร, โภชนาการ, ประสานกับ Frey | Sonnet |
+| Lilly | โคชบุคลิกภาพ · สไตล์, แฟชั่น, femininity, การเข้าสังคม | Sonnet |
 
 ## Skills (.claude/skills/)
 - `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Lauren(audit) → Nicole(เก็บ)
