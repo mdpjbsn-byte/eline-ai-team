@@ -39,7 +39,7 @@ _อัปเดต: 2026-06-03_
 ### ⚡ Independent
 | ชื่อ | หน้าที่ | model |
 |---|---|---|
-| Orius The Archmage | พ่อมดขาวสูงสุด · คำถามใหญ่ชีวิต ปัญญา มุมมอง ทางแยก | Sonnet |
+| Orius The Archmage | มหาจอมเวทผู้ทรงปัญญา · Healer, Sage, Mystic, Spiritual Teacher | Sonnet |
 
 ## Skills (.claude/skills/)
 - `/research-idea` — Luna(idea card) → Rowan(NotebookLM) → Lauren(audit) → Nicole(เก็บ)
