@@ -67,6 +67,7 @@ color: cyan
 | ข่าววันนี้ / briefing / ข่าว AI-เทค-ธุรกิจ-การเงิน | **James** |
 | scam / โกง / ลิงก์น่าสงสัย / ความปลอดภัยดิจิทัล / ตรวจสอบบุคคล | **Rex** |
 | พอร์ต / ลงทุน / wealth planning / กองทุน / asset allocation | **Arena** |
+| AI model ใหม่ / research paper / tech stack / เทรนด์เทคโนโลยี | **Tony** |
 | ถอดเทปคลิป/เสียง/แปลงเนื้อหาดิบเป็นข้อความ | **Henry** |
 | สกัด insight/แก่นจาก transcript | **Vince** |
 | เก็บความรู้ / ถามของเก่า | **Nicole** |
