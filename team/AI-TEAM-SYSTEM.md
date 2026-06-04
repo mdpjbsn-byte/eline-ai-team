@@ -2,7 +2,7 @@
 _เรื่องทีม/ระบบ — อยู่ใน Eline ไม่ใช่ Obsidian (Obsidian = ความรู้/งานเท่านั้น)_
 _อัปเดต: 2026-06-03_
 
-## ทีม 19 ตัว (.claude/agents/)
+## ทีม 20 ตัว (.claude/agents/)
 
 ### 🏢 Work Team
 
@@ -20,6 +20,7 @@ _อัปเดต: 2026-06-03_
 | Vince | สกัด insight atoms (ขั้น 2) | Sonnet |
 | Nicole | เก็บ KB เท่านั้น (Jarvis ห้ามเขียน KB เอง) | Haiku |
 | Professor Salevan | อาจารย์ · สอนเจ้านายทุกวิชา + เทรน/ปรับ prompt agent ในทีม | Sonnet |
+| Sir Edmund | ทนายประจำตระกูล · สัญญา กฎหมายธุรกิจ ลิขสิทธิ์ PDPA ทรัพย์สิน | Sonnet |
 
 ### 🏠 Life Team
 | ชื่อ | หน้าที่ | model |
