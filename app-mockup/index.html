@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emma — บัญชีส่วนตัว</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: #f0f2f5;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    padding: 50px 24px 32px;
+    color: white;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .greeting { font-size: 14px; opacity: 0.85; }
+  .name { font-size: 20px; font-weight: 700; }
+
+  .avatar {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .balance-label { font-size: 13px; opacity: 0.8; margin-bottom: 4px; }
+  .balance-amount {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+  }
+
+  .balance-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .balance-card {
+    flex: 1;
+    background: rgba(255,255,255,0.18);
+    border-radius: 16px;
+    padding: 12px 14px;
+    backdrop-filter: blur(10px);
+  }
+
+  .balance-card .label {
+    font-size: 11px;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .balance-card .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .dot-green { background: #55efc4; }
+  .dot-red { background: #ff7675; }
+
+  .balance-card .amount {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  /* Quick actions */
+  .quick-actions {
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 20px 16px;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  .quick-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .quick-icon {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+
+  .quick-icon.income { background: #e8faf4; }
+  .quick-icon.expense { background: #fff0f0; }
+  .quick-icon.transfer { background: #f0f0ff; }
+  .quick-icon.scan { background: #fff8e8; }
+
+  .quick-btn span { font-size: 11px; color: #636e72; font-weight: 500; }
+
+  /* Sections */
+  .section { padding: 20px 20px 0; }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .section-title { font-size: 16px; font-weight: 700; color: #2d3436; }
+  .see-all { font-size: 13px; color: #6c5ce7; font-weight: 500; }
+
+  /* Budget bar */
+  .budget-card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+
+  .budget-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .budget-cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .budget-emoji {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .budget-name { font-size: 14px; font-weight: 600; color: #2d3436; }
+  .budget-sub { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+  .budget-amounts { text-align: right; }
+  .budget-spent { font-size: 15px; font-weight: 700; color: #2d3436; }
+  .budget-total { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+
+  .progress-bar {
+    height: 6px;
+    background: #f0f2f5;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.3s ease;
+  }
+
+  .fill-green { background: linear-gradient(90deg, #00b894, #55efc4); }
+  .fill-orange { background: linear-gradient(90deg, #e17055, #fdcb6e); }
+  .fill-purple { background: linear-gradient(90deg, #6c5ce7, #a29bfe); }
+
+  /* Transactions */
+  .tx-list { background: white; border-radius: 20px; overflow: hidden; }
+
+  .tx-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+    border-bottom: 1px solid #f8f9fa;
+  }
+  .tx-item:last-child { border-bottom: none; }
+
+  .tx-icon {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .tx-info { flex: 1; }
+  .tx-name { font-size: 14px; font-weight: 600; color: #2d3436; }
+  .tx-cat { font-size: 12px; color: #b2bec3; margin-top: 2px; }
+  .tx-right { text-align: right; }
+  .tx-amount { font-size: 15px; font-weight: 700; }
+  .tx-amount.inc { color: #00b894; }
+  .tx-amount.exp { color: #e17055; }
+  .tx-date { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 14px 8px 24px;
+    border-top: 1px solid #f0f2f5;
+    margin-top: 20px;
+    position: sticky;
+    bottom: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 4px 16px;
+    border-radius: 12px;
+  }
+
+  .nav-item.active {
+    background: #f0edff;
+  }
+
+  .nav-icon { font-size: 22px; }
+  .nav-label { font-size: 10px; color: #b2bec3; font-weight: 500; }
+  .nav-item.active .nav-label { color: #6c5ce7; }
+
+  /* FAB */
+  .fab {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    color: white;
+    box-shadow: 0 8px 24px rgba(108,92,231,0.45);
+    cursor: pointer;
+    margin-top: -10px;
+  }
+
+  .month-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .month-tabs::-webkit-scrollbar { display: none; }
+
+  .month-tab {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+  }
+
+  .month-tab.active {
+    background: #6c5ce7;
+    color: white;
+  }
+
+  .month-tab:not(.active) {
+    background: white;
+    color: #636e72;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="greeting">สวัสดีตอนเช้า 👋</div>
+        <div class="name">เอลิเน่</div>
+      </div>
+      <div class="avatar">🌸</div>
+    </div>
+
+    <div class="balance-label">ยอดคงเหลือเดือนนี้</div>
+    <div class="balance-amount">฿ 28,450</div>
+
+    <div class="balance-row">
+      <div class="balance-card">
+        <div class="label">
+          <div class="dot dot-green"></div>
+          รายรับ
+        </div>
+        <div class="amount">฿ 55,000</div>
+      </div>
+      <div class="balance-card">
+        <div class="label">
+          <div class="dot dot-red"></div>
+          รายจ่าย
+        </div>
+        <div class="amount">฿ 26,550</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <button class="quick-btn">
+      <div class="quick-icon income">💚</div>
+      <span>รายรับ</span>
+    </button>
+    <button class="quick-btn">
+      <div class="quick-icon expense">❤️</div>
+      <span>รายจ่าย</span>
+    </button>
+    <button class="quick-btn">
+      <div class="quick-icon scan">📷</div>
+      <span>สแกนสลิป</span>
+    </button>
+    <button class="quick-btn">
+      <div class="quick-icon transfer">📊</div>
+      <span>รายงาน</span>
+    </button>
+  </div>
+
+  <!-- Month tabs -->
+  <div style="height:16px"></div>
+  <div class="month-tabs">
+    <button class="month-tab">มี.ค.</button>
+    <button class="month-tab">เม.ย.</button>
+    <button class="month-tab">พ.ค.</button>
+    <button class="month-tab active">มิ.ย.</button>
+  </div>
+
+  <!-- Budget section -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">งบประมาณหมวดหมู่</div>
+      <div class="see-all">ดูทั้งหมด</div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-top">
+        <div class="budget-cat">
+          <div class="budget-emoji" style="background:#e8faf4">🍜</div>
+          <div>
+            <div class="budget-name">อาหาร</div>
+            <div class="budget-sub">ใช้ไป 72%</div>
+          </div>
+        </div>
+        <div class="budget-amounts">
+          <div class="budget-spent">฿ 7,200</div>
+          <div class="budget-total">/ ฿ 10,000</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-green" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-top">
+        <div class="budget-cat">
+          <div class="budget-emoji" style="background:#fff8e8">🛍️</div>
+          <div>
+            <div class="budget-name">ช้อปปิ้ง</div>
+            <div class="budget-sub">ใช้ไป 88%</div>
+          </div>
+        </div>
+        <div class="budget-amounts">
+          <div class="budget-spent">฿ 8,800</div>
+          <div class="budget-total">/ ฿ 10,000</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-orange" style="width:88%"></div>
+      </div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-top">
+        <div class="budget-cat">
+          <div class="budget-emoji" style="background:#f0f0ff">✈️</div>
+          <div>
+            <div class="budget-name">ท่องเที่ยว</div>
+            <div class="budget-sub">ใช้ไป 40%</div>
+          </div>
+        </div>
+        <div class="budget-amounts">
+          <div class="budget-spent">฿ 4,000</div>
+          <div class="budget-total">/ ฿ 10,000</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill fill-purple" style="width:40%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent transactions -->
+  <div class="section" style="margin-top:20px">
+    <div class="section-header">
+      <div class="section-title">รายการล่าสุด</div>
+      <div class="see-all">ดูทั้งหมด</div>
+    </div>
+    <div class="tx-list">
+      <div class="tx-item">
+        <div class="tx-icon" style="background:#e8faf4">☕</div>
+        <div class="tx-info">
+          <div class="tx-name">Starbucks</div>
+          <div class="tx-cat">อาหาร · คาเฟ่</div>
+        </div>
+        <div class="tx-right">
+          <div class="tx-amount exp">- ฿165</div>
+          <div class="tx-date">วันนี้ 08:32</div>
+        </div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon" style="background:#fff0f0">🛒</div>
+        <div class="tx-info">
+          <div class="tx-name">Lazada</div>
+          <div class="tx-cat">ช้อปปิ้ง · ออนไลน์</div>
+        </div>
+        <div class="tx-right">
+          <div class="tx-amount exp">- ฿1,290</div>
+          <div class="tx-date">เมื่อวาน 15:10</div>
+        </div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon" style="background:#e8faf4">💰</div>
+        <div class="tx-info">
+          <div class="tx-name">เงินเดือน</div>
+          <div class="tx-cat">รายรับ · งานประจำ</div>
+        </div>
+        <div class="tx-right">
+          <div class="tx-amount inc">+ ฿45,000</div>
+          <div class="tx-date">1 มิ.ย. 09:00</div>
+        </div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon" style="background:#fff8e8">🍱</div>
+        <div class="tx-info">
+          <div class="tx-name">ข้าวกลางวัน</div>
+          <div class="tx-cat">อาหาร · ร้านอาหาร</div>
+        </div>
+        <div class="tx-right">
+          <div class="tx-amount exp">- ฿120</div>
+          <div class="tx-date">1 มิ.ย. 12:30</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label" style="color:#6c5ce7">หน้าหลัก</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">รายการ</div>
+    </div>
+    <div class="fab">＋</div>
+    <div class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">รายงาน</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">ตั้งค่า</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
