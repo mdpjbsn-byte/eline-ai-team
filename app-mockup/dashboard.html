@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eline Finance — Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0f0f14;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .label-above {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ===== PHONE ===== */
+  .phone {
+    width: 390px;
+    background: #13131a;
+    border-radius: 44px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    padding: 52px 24px 0;
+    background: #13131a;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .logo {
+    font-size: 20px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { font-weight: 400; opacity: 0.7; }
+
+  .avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  /* Net Worth */
+  .networth-section {
+    text-align: center;
+    padding: 0 24px 28px;
+  }
+
+  .nw-label {
+    font-size: 12px;
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .nw-amount {
+    font-size: 44px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .nw-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(52, 211, 153, 0.12);
+    color: #34d399;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    padding: 0 20px;
+    gap: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    color: #a78bfa;
+    border-bottom-color: #a78bfa;
+  }
+
+  /* Scroll area */
+  .scroll {
+    padding: 20px 18px;
+    overflow-y: auto;
+    max-height: 600px;
+    scrollbar-width: none;
+  }
+  .scroll::-webkit-scrollbar { display: none; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: #1e1e2a;
+    border-radius: 20px;
+    padding: 18px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 0.3px;
+  }
+
+  .card-link {
+    font-size: 12px;
+    color: #a78bfa;
+    font-weight: 500;
+  }
+
+  /* ===== CASHFLOW MINI ===== */
+  .cf-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .cf-box {
+    flex: 1;
+    background: #16161f;
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .cf-icon-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .cf-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .cf-lbl { font-size: 11px; color: #555; font-weight: 500; }
+  .cf-val { font-size: 20px; font-weight: 800; color: #fff; }
+  .cf-sub { font-size: 11px; color: #444; margin-top: 3px; }
+
+  /* ===== MINI BAR CHART ===== */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 48px;
+    margin-top: 12px;
+  }
+
+  .bar-group {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+  }
+
+  .bar {
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.3s;
+  }
+
+  .bar-labels {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+  }
+
+  .bar-label {
+    flex: 1;
+    text-align: center;
+    font-size: 9px;
+    color: #444;
+  }
+
+  /* ===== ASSET ALLOCATION ===== */
+  .alloc-list { }
+
+  .alloc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .alloc-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .alloc-color {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .alloc-name { flex: 1; font-size: 13px; color: #ccc; font-weight: 500; }
+  .alloc-bar-wrap { width: 80px; height: 4px; background: #2a2a38; border-radius: 999px; overflow: hidden; }
+  .alloc-bar-fill { height: 100%; border-radius: 999px; }
+  .alloc-pct { font-size: 12px; color: #666; width: 34px; text-align: right; }
+  .alloc-val { font-size: 13px; font-weight: 700; color: #fff; width: 72px; text-align: right; }
+
+  /* ===== PORTFOLIO ITEMS ===== */
+  .port-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .port-item:last-child { border-bottom: none; }
+
+  .port-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .port-info { flex: 1; }
+  .port-name { font-size: 14px; font-weight: 700; color: #eee; }
+  .port-sub { font-size: 11px; color: #555; margin-top: 2px; }
+
+  .port-right { text-align: right; }
+  .port-val { font-size: 14px; font-weight: 700; color: #fff; }
+  .port-change { font-size: 12px; font-weight: 600; margin-top: 2px; }
+  .up { color: #34d399; }
+  .down { color: #f87171; }
+
+  /* ===== DONUT CHART (CSS) ===== */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .donut {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #a78bfa 0% 35%,
+      #60a5fa 35% 58%,
+      #34d399 58% 72%,
+      #fb923c 72% 83%,
+      #f472b6 83% 100%
+    );
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .donut::after {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    background: #1e1e2a;
+    border-radius: 50%;
+  }
+
+  .donut-legend { flex: 1; }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .legend-name { font-size: 11px; color: #888; flex: 1; }
+  .legend-pct { font-size: 11px; font-weight: 700; color: #ccc; }
+
+  /* ===== QUICK ACTIONS ===== */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .qa-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .qa-icon {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .qa-label { font-size: 10px; color: #666; font-weight: 500; text-align: center; }
+
+  /* ===== BOTTOM NAV ===== */
+  .bottom-nav {
+    background: #1a1a24;
+    display: flex;
+    justify-content: space-around;
+    padding: 14px 8px 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+
+  .nav-item.active { background: rgba(167,139,250,0.1); }
+  .nav-icon { font-size: 20px; }
+  .nav-lbl { font-size: 9px; color: #444; font-weight: 600; }
+  .nav-item.active .nav-lbl { color: #a78bfa; }
+
+  .fab {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    color: white;
+    box-shadow: 0 6px 24px rgba(167,139,250,0.4);
+    margin-top: -8px;
+    cursor: pointer;
+  }
+
+  /* ===== SECOND PHONE (PORTFOLIO DETAIL) ===== */
+  .phone2 {
+    width: 390px;
+    background: #13131a;
+    border-radius: 44px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+
+  .port-header {
+    padding: 52px 24px 20px;
+    background: #13131a;
+  }
+
+  .port-header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .back {
+    width: 36px; height: 36px;
+    background: #1e1e2a;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: #888;
+    cursor: pointer;
+  }
+
+  .ph-title { font-size: 18px; font-weight: 700; color: #fff; }
+
+  .port-total-box {
+    background: linear-gradient(135deg, rgba(167,139,250,0.15), rgba(96,165,250,0.1));
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(167,139,250,0.2);
+    margin-bottom: 4px;
+  }
+
+  .pt-label { font-size: 12px; color: #666; margin-bottom: 4px; }
+  .pt-amount { font-size: 36px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 8px; }
+
+  .pt-stats { display: flex; gap: 16px; }
+  .pt-stat { }
+  .pt-stat-label { font-size: 10px; color: #555; margin-bottom: 2px; }
+  .pt-stat-val { font-size: 14px; font-weight: 700; }
+
+  /* Category sections */
+  .cat-section { margin-bottom: 8px; }
+  .cat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px 10px;
+  }
+
+  .cat-left { display: flex; align-items: center; gap: 8px; }
+  .cat-emoji { font-size: 18px; }
+  .cat-name { font-size: 14px; font-weight: 700; color: #ccc; }
+  .cat-count { font-size: 11px; color: #555; }
+
+  .cat-right { text-align: right; }
+  .cat-total { font-size: 15px; font-weight: 700; color: #fff; }
+  .cat-pnl { font-size: 12px; font-weight: 600; }
+
+  .cat-items { padding: 0 18px; }
+
+  .stock-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .stock-item:last-child { border-bottom: none; }
+
+  .stock-logo {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: white;
+    font-family: monospace;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+
+  .stock-info { flex: 1; }
+  .stock-ticker { font-size: 14px; font-weight: 700; color: #eee; }
+  .stock-name { font-size: 11px; color: #555; margin-top: 1px; }
+
+  .stock-right { text-align: right; }
+  .stock-val { font-size: 14px; font-weight: 700; color: #fff; }
+  .stock-shares { font-size: 11px; color: #555; margin-top: 1px; }
+  .stock-pnl { font-size: 12px; font-weight: 600; margin-top: 2px; }
+
+  /* ===== SPARKLINE (SVG) ===== */
+  .spark-wrap {
+    margin: -4px 0 0 0;
+    padding: 0 18px 12px;
+  }
+
+  .mini-chart-bg {
+    background: #16161f;
+    border-radius: 12px;
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  .chart-label {
+    font-size: 10px;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== PHONE 1: MAIN DASHBOARD ========== -->
+<div>
+  <div class="label-above">หน้าหลัก — Overview</div>
+  <div class="phone">
+
+    <div class="header">
+      <div class="header-top">
+        <div class="logo">eline<span>finance</span></div>
+        <div class="avatar">🌸</div>
+      </div>
+    </div>
+
+    <!-- Net Worth -->
+    <div class="networth-section">
+      <div class="nw-label">NET WORTH ทั้งหมด</div>
+      <div class="nw-amount">฿2,847,500</div>
+      <div class="nw-change">▲ +฿48,200 (+1.72%) เดือนนี้</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active">Overview</div>
+      <div class="tab">บัญชี</div>
+      <div class="tab">ลงทุน</div>
+      <div class="tab">รายจ่าย</div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Quick actions -->
+      <div class="card" style="padding:16px 14px">
+        <div class="quick-grid">
+          <div class="qa-btn">
+            <div class="qa-icon" style="background:#1a1f2e">💚</div>
+            <div class="qa-label">รายรับ</div>
+          </div>
+          <div class="qa-btn">
+            <div class="qa-icon" style="background:#1f1a1a">❤️</div>
+            <div class="qa-label">รายจ่าย</div>
+          </div>
+          <div class="qa-btn">
+            <div class="qa-icon" style="background:#1a1e1a">📈</div>
+            <div class="qa-label">เพิ่มหุ้น</div>
+          </div>
+          <div class="qa-btn">
+            <div class="qa-icon" style="background:#1e1a2a">📄</div>
+            <div class="qa-label">Invoice</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cash flow -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">CASH FLOW มิ.ย. 2026</div>
+          <div class="card-link">ดูทั้งหมด →</div>
+        </div>
+        <div class="cf-row">
+          <div class="cf-box">
+            <div class="cf-icon-row">
+              <div class="cf-dot" style="background:#34d399"></div>
+              <div class="cf-lbl">รายรับ</div>
+            </div>
+            <div class="cf-val">฿55,000</div>
+            <div class="cf-sub">เงินเดือน + Freelance</div>
+          </div>
+          <div class="cf-box">
+            <div class="cf-icon-row">
+              <div class="cf-dot" style="background:#f87171"></div>
+              <div class="cf-lbl">รายจ่าย</div>
+            </div>
+            <div class="cf-val">฿26,550</div>
+            <div class="cf-sub">ใช้ไป 48%</div>
+          </div>
+        </div>
+        <!-- Mini bar chart -->
+        <div class="bar-chart">
+          <div class="bar-group">
+            <div class="bar" style="height:28px;background:#34d399;opacity:0.5"></div>
+            <div class="bar" style="height:16px;background:#f87171;opacity:0.5"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:32px;background:#34d399;opacity:0.5"></div>
+            <div class="bar" style="height:20px;background:#f87171;opacity:0.5"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:36px;background:#34d399;opacity:0.5"></div>
+            <div class="bar" style="height:24px;background:#f87171;opacity:0.5"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:42px;background:#34d399;opacity:0.8"></div>
+            <div class="bar" style="height:28px;background:#f87171;opacity:0.8"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:34px;background:#34d399;opacity:0.6"></div>
+            <div class="bar" style="height:22px;background:#f87171;opacity:0.6"></div>
+          </div>
+          <div class="bar-group">
+            <div class="bar" style="height:48px;background:#34d399"></div>
+            <div class="bar" style="height:30px;background:#f87171"></div>
+          </div>
+        </div>
+        <div class="bar-labels">
+          <div class="bar-label">ม.ค.</div>
+          <div class="bar-label">ก.พ.</div>
+          <div class="bar-label">มี.ค.</div>
+          <div class="bar-label">เม.ย.</div>
+          <div class="bar-label">พ.ค.</div>
+          <div class="bar-label">มิ.ย.</div>
+        </div>
+      </div>
+
+      <!-- Asset Allocation -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">ASSET ALLOCATION</div>
+          <div class="card-link">แก้ไข</div>
+        </div>
+        <div class="donut-wrap">
+          <div class="donut"></div>
+          <div class="donut-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#a78bfa"></div>
+              <div class="legend-name">หุ้นไทย</div>
+              <div class="legend-pct">35%</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#60a5fa"></div>
+              <div class="legend-name">หุ้น US</div>
+              <div class="legend-pct">23%</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#34d399"></div>
+              <div class="legend-name">กองทุน</div>
+              <div class="legend-pct">14%</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#fb923c"></div>
+              <div class="legend-name">Crypto</div>
+              <div class="legend-pct">11%</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#f472b6"></div>
+              <div class="legend-name">เงินสด</div>
+              <div class="legend-pct">17%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top holdings -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">TOP HOLDINGS</div>
+          <div class="card-link">ดูพอร์ต →</div>
+        </div>
+        <div class="port-item">
+          <div class="port-icon" style="background:#1a2a1a">🇹🇭</div>
+          <div class="port-info">
+            <div class="port-name">PTT</div>
+            <div class="port-sub">500 หุ้น · ตลาดหลักทรัพย์ไทย</div>
+          </div>
+          <div class="port-right">
+            <div class="port-val">฿185,000</div>
+            <div class="port-change up">▲ +12.4%</div>
+          </div>
+        </div>
+        <div class="port-item">
+          <div class="port-icon" style="background:#1a1f2e">🇺🇸</div>
+          <div class="port-info">
+            <div class="port-name">NVDA</div>
+            <div class="port-sub">10 shares · NASDAQ</div>
+          </div>
+          <div class="port-right">
+            <div class="port-val">฿450,000</div>
+            <div class="port-change up">▲ +68.2%</div>
+          </div>
+        </div>
+        <div class="port-item">
+          <div class="port-icon" style="background:#1f1a10">₿</div>
+          <div class="port-info">
+            <div class="port-name">Bitcoin</div>
+            <div class="port-sub">0.25 BTC · Crypto</div>
+          </div>
+          <div class="port-right">
+            <div class="port-val">฿312,500</div>
+            <div class="port-change down">▼ -3.1%</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="bottom-nav">
+      <div class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-lbl">Overview</div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">📋</div>
+        <div class="nav-lbl">บัญชี</div>
+      </div>
+      <div class="fab">＋</div>
+      <div class="nav-item">
+        <div class="nav-icon">📈</div>
+        <div class="nav-lbl">พอร์ต</div>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">📄</div>
+        <div class="nav-lbl">Invoice</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== PHONE 2: PORTFOLIO DETAIL ========== -->
+<div>
+  <div class="label-above">หน้าพอร์ตลงทุน — รายละเอียด</div>
+  <div class="phone2">
+
+    <div class="port-header">
+      <div class="port-header-top">
+        <div class="back">←</div>
+        <div class="ph-title">พอร์ตลงทุน</div>
+      </div>
+
+      <div class="port-total-box">
+        <div class="pt-label">มูลค่าพอร์ตรวม</div>
+        <div class="pt-amount">฿2,367,500</div>
+        <div class="pt-stats">
+          <div class="pt-stat">
+            <div class="pt-stat-label">กำไร/ขาดทุน (รวม)</div>
+            <div class="pt-stat-val up">▲ +฿487,200</div>
+          </div>
+          <div class="pt-stat">
+            <div class="pt-stat-label">Return รวม</div>
+            <div class="pt-stat-val up">+25.9%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll" style="max-height:640px">
+
+      <!-- หุ้นไทย -->
+      <div class="cat-section">
+        <div class="cat-header">
+          <div class="cat-left">
+            <div class="cat-emoji">🇹🇭</div>
+            <div>
+              <div class="cat-name">หุ้นไทย</div>
+              <div class="cat-count">4 ตัว</div>
+            </div>
+          </div>
+          <div class="cat-right">
+            <div class="cat-total">฿827,000</div>
+            <div class="cat-pnl up">▲ +฿127,000 (+18.1%)</div>
+          </div>
+        </div>
+        <div class="cat-items" style="background:#1e1e2a;border-radius:16px;padding:0 14px">
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#1a3a2a">PTT</div>
+            <div class="stock-info">
+              <div class="stock-ticker">PTT</div>
+              <div class="stock-name">ปตท.</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿185,000</div>
+              <div class="stock-shares">500 หุ้น · ราคา ฿370</div>
+              <div class="stock-pnl up">▲ +฿22,500 (+13.8%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#2a1a1a">KBANK</div>
+            <div class="stock-info">
+              <div class="stock-ticker">KBANK</div>
+              <div class="stock-name">กสิกรไทย</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿320,000</div>
+              <div class="stock-shares">1,000 หุ้น · ราคา ฿320</div>
+              <div class="stock-pnl up">▲ +฿70,000 (+28%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#1a1a3a">CPALL</div>
+            <div class="stock-info">
+              <div class="stock-ticker">CPALL</div>
+              <div class="stock-name">ซีพี ออลล์</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿322,000</div>
+              <div class="stock-shares">1,400 หุ้น · ราคา ฿23</div>
+              <div class="stock-pnl down">▼ -฿28,000 (-8%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- หุ้น US -->
+      <div class="cat-section">
+        <div class="cat-header">
+          <div class="cat-left">
+            <div class="cat-emoji">🇺🇸</div>
+            <div>
+              <div class="cat-name">หุ้น US</div>
+              <div class="cat-count">3 ตัว</div>
+            </div>
+          </div>
+          <div class="cat-right">
+            <div class="cat-total">฿648,000</div>
+            <div class="cat-pnl up">▲ +฿248,000 (+62%)</div>
+          </div>
+        </div>
+        <div class="cat-items" style="background:#1e1e2a;border-radius:16px;padding:0 14px">
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#1a2a1a">NVDA</div>
+            <div class="stock-info">
+              <div class="stock-ticker">NVDA</div>
+              <div class="stock-name">Nvidia</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿450,000</div>
+              <div class="stock-shares">10 shares · $1,250</div>
+              <div class="stock-pnl up">▲ +฿180,000 (+67%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#2a2a1a">AAPL</div>
+            <div class="stock-info">
+              <div class="stock-ticker">AAPL</div>
+              <div class="stock-name">Apple</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿198,000</div>
+              <div class="stock-shares">15 shares · $396</div>
+              <div class="stock-pnl up">▲ +฿48,000 (+32%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crypto -->
+      <div class="cat-section">
+        <div class="cat-header">
+          <div class="cat-left">
+            <div class="cat-emoji">₿</div>
+            <div>
+              <div class="cat-name">Crypto</div>
+              <div class="cat-count">2 coins</div>
+            </div>
+          </div>
+          <div class="cat-right">
+            <div class="cat-total">฿412,500</div>
+            <div class="cat-pnl down">▼ -฿37,500 (-8.3%)</div>
+          </div>
+        </div>
+        <div class="cat-items" style="background:#1e1e2a;border-radius:16px;padding:0 14px">
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#2a1f0a">BTC</div>
+            <div class="stock-info">
+              <div class="stock-ticker">Bitcoin</div>
+              <div class="stock-name">BTC</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿312,500</div>
+              <div class="stock-shares">0.25 BTC</div>
+              <div class="stock-pnl down">▼ -฿12,500 (-3.8%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#0a1a2a">ETH</div>
+            <div class="stock-info">
+              <div class="stock-ticker">Ethereum</div>
+              <div class="stock-name">ETH</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿100,000</div>
+              <div class="stock-shares">1.2 ETH</div>
+              <div class="stock-pnl down">▼ -฿25,000 (-20%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- กองทุน -->
+      <div class="cat-section">
+        <div class="cat-header">
+          <div class="cat-left">
+            <div class="cat-emoji">🏦</div>
+            <div>
+              <div class="cat-name">กองทุนรวม</div>
+              <div class="cat-count">2 กอง</div>
+            </div>
+          </div>
+          <div class="cat-right">
+            <div class="cat-total">฿480,000</div>
+            <div class="cat-pnl up">▲ +฿80,000 (+20%)</div>
+          </div>
+        </div>
+        <div class="cat-items" style="background:#1e1e2a;border-radius:16px;padding:0 14px">
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#1a2a2a">RMF</div>
+            <div class="stock-info">
+              <div class="stock-ticker">KFRMF</div>
+              <div class="stock-name">กองทุน RMF กสิกรไทย</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿280,000</div>
+              <div class="stock-shares">NAV ฿28.50</div>
+              <div class="stock-pnl up">▲ +฿50,000 (+21.7%)</div>
+            </div>
+          </div>
+          <div class="stock-item">
+            <div class="stock-logo" style="background:#2a1a2a">SSF</div>
+            <div class="stock-info">
+              <div class="stock-ticker">KFSSF</div>
+              <div class="stock-name">กองทุน SSF กสิกรไทย</div>
+            </div>
+            <div class="stock-right">
+              <div class="stock-val">฿200,000</div>
+              <div class="stock-shares">NAV ฿20.00</div>
+              <div class="stock-pnl up">▲ +฿30,000 (+17.6%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
