@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice — Emma</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* ====== PHONE SHELL ====== */
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: #f8f9fb;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ====== APP HEADER ====== */
+  .app-header {
+    background: white;
+    padding: 52px 24px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  .back-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #f0f2f5;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .page-title { font-size: 18px; font-weight: 700; color: #2d3436; }
+  .page-sub { font-size: 12px; color: #b2bec3; margin-top: 2px; }
+
+  /* ====== SCROLL CONTENT ====== */
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    scrollbar-width: none;
+  }
+  .scroll-content::-webkit-scrollbar { display: none; }
+
+  /* ====== CARDS ====== */
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+
+  .card-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #b2bec3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+
+  /* ====== FORM FIELDS ====== */
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    font-size: 12px;
+    color: #636e72;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .field input, .field textarea, .field select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #f0f2f5;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #2d3436;
+    background: #f8f9fb;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus, .field textarea:focus {
+    border-color: #6c5ce7;
+    background: white;
+  }
+
+  .field textarea { resize: none; height: 60px; }
+
+  .field-row { display: flex; gap: 10px; }
+  .field-row .field { flex: 1; }
+
+  /* ====== LINE ITEMS ====== */
+  .line-item {
+    background: #f8f9fb;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .line-item-top {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .item-name-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1.5px solid #eee;
+    border-radius: 10px;
+    font-size: 13px;
+    background: white;
+    font-family: inherit;
+    outline: none;
+  }
+
+  .remove-btn {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #fff0f0;
+    border: none;
+    color: #e17055;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .line-item-bottom {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .qty-input, .price-input {
+    padding: 7px 10px;
+    border: 1.5px solid #eee;
+    border-radius: 10px;
+    font-size: 13px;
+    background: white;
+    outline: none;
+    font-family: inherit;
+    text-align: right;
+  }
+
+  .qty-input { width: 60px; }
+  .price-input { flex: 1; }
+
+  .item-total {
+    font-size: 14px;
+    font-weight: 700;
+    color: #6c5ce7;
+    min-width: 70px;
+    text-align: right;
+  }
+
+  .add-item-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px dashed #d0c9f5;
+    border-radius: 14px;
+    background: none;
+    color: #6c5ce7;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* ====== SUMMARY ====== */
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #636e72;
+    padding: 6px 0;
+  }
+
+  .summary-row.total {
+    font-size: 17px;
+    font-weight: 800;
+    color: #2d3436;
+    border-top: 1.5px solid #f0f2f5;
+    margin-top: 6px;
+    padding-top: 12px;
+  }
+
+  .summary-row.total .amount { color: #6c5ce7; }
+
+  /* ====== PAYMENT METHOD ====== */
+  .payment-options {
+    display: flex;
+    gap: 8px;
+  }
+
+  .pay-opt {
+    flex: 1;
+    padding: 10px 8px;
+    border: 1.5px solid #f0f2f5;
+    border-radius: 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .pay-opt.active {
+    border-color: #6c5ce7;
+    background: #f0edff;
+  }
+
+  .pay-opt .icon { font-size: 22px; margin-bottom: 4px; }
+  .pay-opt .label { font-size: 11px; font-weight: 600; color: #636e72; }
+  .pay-opt.active .label { color: #6c5ce7; }
+
+  /* ====== BOTTOM ACTION ====== */
+  .bottom-action {
+    background: white;
+    padding: 16px 20px 32px;
+    border-top: 1px solid #f0f2f5;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-secondary {
+    flex: 1;
+    padding: 14px;
+    border-radius: 16px;
+    border: 1.5px solid #6c5ce7;
+    background: white;
+    color: #6c5ce7;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    flex: 2;
+    padding: 14px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 6px 20px rgba(108,92,231,0.35);
+  }
+
+  /* ====== INVOICE PREVIEW ====== */
+  .invoice-wrap {
+    width: 420px;
+  }
+
+  .invoice-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #636e72;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .invoice-paper {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+  }
+
+  .invoice-top {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    padding: 32px 28px 28px;
+    color: white;
+  }
+
+  .invoice-brand {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .invoice-tagline {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 24px;
+  }
+
+  .invoice-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .invoice-title-tag {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+
+  .invoice-title { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+
+  .invoice-number-box {
+    text-align: right;
+  }
+
+  .inv-num-label { font-size: 10px; opacity: 0.7; margin-bottom: 2px; }
+  .inv-num { font-size: 16px; font-weight: 700; }
+  .inv-date { font-size: 11px; opacity: 0.7; margin-top: 4px; }
+
+  /* Invoice body */
+  .invoice-body { padding: 24px 28px; }
+
+  .inv-parties {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+
+  .inv-party-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #b2bec3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .inv-party-name { font-size: 15px; font-weight: 700; color: #2d3436; margin-bottom: 3px; }
+  .inv-party-detail { font-size: 12px; color: #636e72; line-height: 1.6; }
+
+  /* Items table */
+  .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+
+  .inv-table th {
+    font-size: 10px;
+    font-weight: 700;
+    color: #b2bec3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f2f5;
+    text-align: left;
+  }
+
+  .inv-table th:last-child, .inv-table td:last-child { text-align: right; }
+  .inv-table th:nth-child(2), .inv-table td:nth-child(2) { text-align: center; }
+  .inv-table th:nth-child(3), .inv-table td:nth-child(3) { text-align: right; }
+
+  .inv-table td {
+    padding: 12px 0;
+    font-size: 13px;
+    color: #2d3436;
+    border-bottom: 1px solid #f8f9fb;
+  }
+
+  .inv-table tr:last-child td { border-bottom: none; }
+
+  .item-desc { font-weight: 600; }
+  .item-sub { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+
+  /* Summary */
+  .inv-summary {
+    background: #f8f9fb;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .inv-sum-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #636e72;
+    padding: 4px 0;
+  }
+
+  .inv-sum-row.grand-total {
+    font-size: 16px;
+    font-weight: 800;
+    color: #2d3436;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 8px;
+    padding-top: 10px;
+  }
+
+  .inv-sum-row.grand-total .grand-amount { color: #6c5ce7; }
+
+  /* Payment section */
+  .inv-payment {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: #f0edff;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .qr-box {
+    width: 80px; height: 80px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #b2bec3;
+    text-align: center;
+    flex-shrink: 0;
+    border: 1px solid #e8e0ff;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .qr-icon { font-size: 32px; }
+
+  .pay-info { flex: 1; }
+  .pay-method-label { font-size: 10px; color: #6c5ce7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .pay-account { font-size: 15px; font-weight: 700; color: #2d3436; }
+  .pay-name { font-size: 12px; color: #636e72; margin-top: 2px; }
+  .pay-bank { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+
+  /* Footer */
+  .inv-footer {
+    text-align: center;
+    padding: 16px 0 8px;
+    border-top: 1px solid #f0f2f5;
+  }
+
+  .inv-footer-note { font-size: 11px; color: #b2bec3; line-height: 1.7; }
+  .inv-footer-brand { font-size: 12px; color: #d0c9f5; font-weight: 600; margin-top: 8px; }
+
+  /* Action buttons below invoice */
+  .invoice-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .inv-act-btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .inv-act-btn.share {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: white;
+    border: none;
+    box-shadow: 0 6px 20px rgba(108,92,231,0.3);
+  }
+
+  .inv-act-btn.pdf {
+    background: white;
+    color: #636e72;
+    border: 1.5px solid #e0e0e0;
+  }
+
+  .inv-act-btn.copy {
+    background: white;
+    color: #636e72;
+    border: 1.5px solid #e0e0e0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== LEFT: CREATE INVOICE FORM ===== -->
+<div class="phone">
+  <div class="app-header">
+    <div class="back-btn">←</div>
+    <div>
+      <div class="page-title">สร้าง Invoice</div>
+      <div class="page-sub">INV-2026-0012</div>
+    </div>
+  </div>
+
+  <div class="scroll-content">
+
+    <!-- Client info -->
+    <div class="card">
+      <div class="card-label">ข้อมูลลูกค้า</div>
+      <div class="field">
+        <label>ชื่อลูกค้า / บริษัท</label>
+        <input type="text" placeholder="เช่น คุณสมชาย / บริษัท ABC" value="บริษัท ดีไซน์ดี จำกัด">
+      </div>
+      <div class="field">
+        <label>อีเมล (สำหรับส่ง)</label>
+        <input type="email" placeholder="example@email.com" value="somchai@designdee.co.th">
+      </div>
+      <div class="field">
+        <label>โน้ต (ไม่บังคับ)</label>
+        <textarea placeholder="รายละเอียดเพิ่มเติม..."></textarea>
+      </div>
+    </div>
+
+    <!-- Due date -->
+    <div class="card">
+      <div class="card-label">กำหนดชำระ</div>
+      <div class="field-row">
+        <div class="field">
+          <label>วันที่ออก</label>
+          <input type="text" value="5 มิ.ย. 2026">
+        </div>
+        <div class="field">
+          <label>ครบกำหนด</label>
+          <input type="text" value="20 มิ.ย. 2026">
+        </div>
+      </div>
+    </div>
+
+    <!-- Line items -->
+    <div class="card">
+      <div class="card-label">รายการงาน</div>
+
+      <div class="line-item">
+        <div class="line-item-top">
+          <input class="item-name-input" type="text" value="ออกแบบโลโก้ + Brand Identity">
+          <button class="remove-btn">×</button>
+        </div>
+        <div class="line-item-bottom">
+          <input class="qty-input" type="text" value="1">
+          <span style="font-size:12px;color:#b2bec3">×</span>
+          <input class="price-input" type="text" placeholder="ราคา/ชิ้น" value="15,000">
+          <div class="item-total">฿15,000</div>
+        </div>
+      </div>
+
+      <div class="line-item">
+        <div class="line-item-top">
+          <input class="item-name-input" type="text" value="Social Media Template (5 แบบ)">
+          <button class="remove-btn">×</button>
+        </div>
+        <div class="line-item-bottom">
+          <input class="qty-input" type="text" value="1">
+          <span style="font-size:12px;color:#b2bec3">×</span>
+          <input class="price-input" type="text" placeholder="ราคา/ชิ้น" value="8,000">
+          <div class="item-total">฿8,000</div>
+        </div>
+      </div>
+
+      <div class="line-item">
+        <div class="line-item-top">
+          <input class="item-name-input" type="text" value="Revision (รอบที่ 2)">
+          <button class="remove-btn">×</button>
+        </div>
+        <div class="line-item-bottom">
+          <input class="qty-input" type="text" value="2">
+          <span style="font-size:12px;color:#b2bec3">×</span>
+          <input class="price-input" type="text" placeholder="ราคา/ชิ้น" value="1,000">
+          <div class="item-total">฿2,000</div>
+        </div>
+      </div>
+
+      <button class="add-item-btn">＋ เพิ่มรายการ</button>
+    </div>
+
+    <!-- Summary -->
+    <div class="card">
+      <div class="card-label">สรุปยอด</div>
+      <div class="summary-row">
+        <span>รวมทั้งหมด</span>
+        <span>฿25,000</span>
+      </div>
+      <div class="summary-row">
+        <span>ภาษีหัก ณ ที่จ่าย 3%</span>
+        <span style="color:#e17055">- ฿750</span>
+      </div>
+      <div class="summary-row total">
+        <span>ยอดที่รับจริง</span>
+        <span class="amount">฿24,250</span>
+      </div>
+    </div>
+
+    <!-- Payment method -->
+    <div class="card">
+      <div class="card-label">ช่องทางรับเงิน</div>
+      <div class="payment-options">
+        <div class="pay-opt active">
+          <div class="icon">📱</div>
+          <div class="label">พร้อมเพย์</div>
+        </div>
+        <div class="pay-opt">
+          <div class="icon">🏦</div>
+          <div class="label">เลขบัญชี</div>
+        </div>
+        <div class="pay-opt">
+          <div class="icon">💳</div>
+          <div class="label">บัตรเครดิต</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-action">
+    <button class="btn-secondary">Preview</button>
+    <button class="btn-primary">✉️ ส่งให้ลูกค้า</button>
+  </div>
+</div>
+
+<!-- ===== RIGHT: INVOICE PREVIEW ===== -->
+<div class="invoice-wrap">
+  <div class="invoice-label">👀 ตัวอย่าง Invoice ที่ลูกค้าเห็น</div>
+
+  <div class="invoice-paper">
+    <!-- Header -->
+    <div class="invoice-top">
+      <div class="invoice-brand">เอลิเน่ ครีเอทีฟ</div>
+      <div class="invoice-tagline">Graphic Design & Brand Identity</div>
+      <div class="invoice-meta">
+        <div>
+          <div class="invoice-title-tag">เอกสาร</div>
+          <div class="invoice-title">INVOICE</div>
+        </div>
+        <div class="invoice-number-box">
+          <div class="inv-num-label">เลขที่</div>
+          <div class="inv-num">INV-2026-0012</div>
+          <div class="inv-date">ออกวันที่ 5 มิ.ย. 2026</div>
+          <div class="inv-date">ครบกำหนด 20 มิ.ย. 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="invoice-body">
+      <!-- Parties -->
+      <div class="inv-parties">
+        <div>
+          <div class="inv-party-label">จาก</div>
+          <div class="inv-party-name">เอลิเน่ ครีเอทีฟ</div>
+          <div class="inv-party-detail">
+            เอลิเน่<br>
+            eline@creative.co.th<br>
+            063-XXX-XXXX
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div class="inv-party-label">ถึง</div>
+          <div class="inv-party-name">บ. ดีไซน์ดี จำกัด</div>
+          <div class="inv-party-detail">
+            คุณสมชาย<br>
+            somchai@designdee.co.th
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <table class="inv-table">
+        <thead>
+          <tr>
+            <th>รายการ</th>
+            <th>จำนวน</th>
+            <th>ราคา/หน่วย</th>
+            <th>รวม</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="item-desc">ออกแบบโลโก้ + Brand Identity</div>
+            </td>
+            <td style="text-align:center;color:#636e72">1</td>
+            <td style="text-align:right;color:#636e72">฿15,000</td>
+            <td style="text-align:right;font-weight:700">฿15,000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="item-desc">Social Media Template</div>
+              <div class="item-sub">5 แบบ</div>
+            </td>
+            <td style="text-align:center;color:#636e72">1</td>
+            <td style="text-align:right;color:#636e72">฿8,000</td>
+            <td style="text-align:right;font-weight:700">฿8,000</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="item-desc">Revision รอบที่ 2</div>
+            </td>
+            <td style="text-align:center;color:#636e72">2</td>
+            <td style="text-align:right;color:#636e72">฿1,000</td>
+            <td style="text-align:right;font-weight:700">฿2,000</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Summary -->
+      <div class="inv-summary">
+        <div class="inv-sum-row">
+          <span>รวมก่อนหัก</span>
+          <span>฿25,000</span>
+        </div>
+        <div class="inv-sum-row">
+          <span>ภาษีหัก ณ ที่จ่าย 3%</span>
+          <span style="color:#e17055">- ฿750</span>
+        </div>
+        <div class="inv-sum-row grand-total">
+          <span>ยอดโอนจริง</span>
+          <span class="grand-amount">฿24,250</span>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="inv-payment">
+        <div class="qr-box">
+          <div class="qr-icon">⬛</div>
+          <div>QR<br>พร้อมเพย์</div>
+        </div>
+        <div class="pay-info">
+          <div class="pay-method-label">ช่องทางชำระเงิน</div>
+          <div class="pay-account">062-XXX-XXXX</div>
+          <div class="pay-name">น.ส. เอลิเน่ XXXX</div>
+          <div class="pay-bank">PromptPay · กสิกรไทย</div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="inv-footer">
+        <div class="inv-footer-note">
+          กรุณาชำระภายใน 15 วัน · หากมีข้อสงสัยติดต่อ eline@creative.co.th<br>
+          ขอบคุณที่ไว้วางใจครับ/ค่ะ 🙏
+        </div>
+        <div class="inv-footer-brand">สร้างด้วย Emma · eline-ai.app</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="invoice-actions">
+    <button class="inv-act-btn share">📤 ส่ง / แชร์</button>
+    <button class="inv-act-btn pdf">📄 PDF</button>
+    <button class="inv-act-btn copy">🔗 Copy link</button>
+  </div>
+</div>
+
+</body>
+</html>
