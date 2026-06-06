@@ -1,5 +1,5 @@
 # ☀️ DASHBOARD — สถานะงาน
-_อยู่ใน Eline (ไม่ใช่ Obsidian) · Morning Brief ดึงจากหน้านี้ · อัปเดต: 2026-06-04_
+_อยู่ใน Eline (ไม่ใช่ Obsidian) · Morning Brief ดึงจากหน้านี้ · อัปเดต: 2026-06-06_
 
 ## ⏭️ ทำต่อ (next actions)
 - [ ] Validate กลุ่มเป้าหมาย Gen Y (YouTube Analytics คู่แข่ง)
