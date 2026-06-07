@@ -1,10 +1,18 @@
 # ความลับ — ห้ามขึ้น GitHub เด็ดขาด
+memory/INTERVIEW.md
 **/notify.py
 *.env
 .env
+.secrets
 **/secrets*
 **/*token*
 **/*credential*
+.wrangler/
+**/.wrangler/
+.netlify/
+
+# backup ทีม (ใหญ่ ซ้ำ เก็บ local พอ)
+.claude/agents-backup-20260607/
 
 # ระบบ
 .DS_Store

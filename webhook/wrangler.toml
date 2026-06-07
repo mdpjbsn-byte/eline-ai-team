@@ -2,7 +2,13 @@ name = "eline-line-webhook"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
+# Morning Brief ทุกเช้า 04:00 น. ไทย (21:00 UTC)
+[triggers]
+crons = ["*/30 * * * *"]  # ทุก 30 นาที — worker เช็คเวลาเองว่าต้องส่งอะไร
+
 # Secrets (ตั้งด้วยคำสั่ง ไม่เก็บในไฟล์):
 #   npx wrangler secret put LINE_TOKEN
 #   npx wrangler secret put ANTHROPIC_API_KEY
 #   npx wrangler secret put LINE_SECRET
+#   npx wrangler secret put GITHUB_TOKEN
+#   npx wrangler secret put LINE_USER_ID
