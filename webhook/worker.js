@@ -7,6 +7,20 @@
 const GITHUB_REPO = "mdpjbsn-byte/eline-ai-team";
 const ALFRED_BOT_USER_ID = "U7e97b1ba9efbfb15bc409e04ecb938f9";
 
+// โมเดล: บทสนทนา/ข้อความถึงเจ้านาย ใช้ Sonnet (ภาษาเป็นธรรมชาติ) — งานเบื้องหลังใช้ Haiku (ถูก+เร็ว)
+const MODEL_CHAT = "claude-sonnet-4-6";
+const MODEL_UTIL = "claude-haiku-4-5-20251001";
+
+// สไตล์การพิมพ์ใน LINE — แนบเข้าทุก prompt ที่ส่งหาเจ้านาย
+const LINE_STYLE = `
+=== วิธีพิมพ์ใน LINE (สำคัญมาก) ===
+- ห้ามใช้ markdown เด็ดขาด: ห้าม ** **, ห้าม #, ห้าม - หรือ * นำหน้าหัวข้อ เพราะ LINE ไม่แปลงให้ จะโชว์สัญลักษณ์ดิบ ๆ อ่านแล้วเหมือนหุ่นยนต์
+- อยากเน้นหรือแยกหัวข้อ ให้ขึ้นบรรทัดใหม่เอา ไม่ใช่ทำตัวหนา
+- น้ำเสียงแบบบัตเลอร์ผู้ใหญ่: สุภาพ นิ่ง มีระดับ น่าเชื่อถือ — พูดเท่าที่ควรพูด
+- ห้ามเวิ่นเว้อ ห้ามขยายความเกินจำเป็น ห้ามหวานเลี่ยน ห้ามประจบ ตรงประเด็นเสมอ
+- emoji ใช้ได้มากสุด 1 ตัวต่อข้อความ หรือไม่ใช้เลยก็ได้
+- กระชับ ได้ใจความ จบเร็ว`;
+
 async function fetchGitHubFile(path, env) {
   const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${path}`, {
     headers: {
@@ -84,6 +98,54 @@ async function fetchNotionTasks(env) {
   }
 }
 
+// ===== State รายวัน (เก็บใน KV) — จำบทสนทนาเช้าทั้งวัน =====
+function bangkokDateKey() {
+  // YYYY-MM-DD ตามเวลาไทย
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
+}
+async function getDayState(env) {
+  if (!env.STATE) return {};
+  try {
+    const raw = await env.STATE.get(`day:${bangkokDateKey()}`);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+async function setDayState(env, patch) {
+  if (!env.STATE) return patch;
+  const next = { ...(await getDayState(env)), ...patch };
+  // เก็บ 2 วัน (กันค้างข้ามคืน) แล้วหมดอายุเอง
+  await env.STATE.put(`day:${bangkokDateKey()}`, JSON.stringify(next), { expirationTtl: 172800 });
+  return next;
+}
+
+// วันหยุด: อ่านจากไฟล์ webhook/holidays.txt (YYYY-MM-DD [โน้ต], # คือคอมเมนต์)
+// คืน "" ถ้าไม่ใช่วันหยุด · คืนโน้ต (หรือ "หยุด") ถ้าเป็นวันหยุด
+async function holidayNoteToday(env) {
+  try {
+    const txt = await fetchGitHubFile("webhook/holidays.txt", env);
+    const today = bangkokDateKey();
+    for (const line of txt.split(/\r?\n/)) {
+      const t = line.trim();
+      if (!t || t.startsWith("#") || !t.startsWith(today)) continue;
+      return t.slice(today.length).trim() || "วันหยุด";
+    }
+  } catch (e) { /* ignore */ }
+  return "";
+}
+async function isHolidayToday(env) {
+  return (await holidayNoteToday(env)) !== "";
+}
+
+// สวิตช์เดียวคุมทั้งวัน: เสาร์/อาทิตย์ หรือ วันหยุดในไฟล์ หรือ เจ้านายบอกว่าไม่ไป = ไม่ใช่วันทำงาน
+async function isWorkdayToday(env) {
+  const wd = new Date().toLocaleString("en-US", { weekday: "short", timeZone: "Asia/Bangkok" });
+  if (wd === "Sat" || wd === "Sun") return false;
+  if (await isHolidayToday(env)) return false;
+  const st = await getDayState(env);
+  if (st.goingToWork === false || st.goingToWork === "false") return false;
+  return true;
+}
+
 async function buildMemory(env, isAlfred) {
   if (isAlfred) {
     const [profile, routine, notionTasks] = await Promise.all([
@@ -115,10 +177,11 @@ function buildJarvisPrompt(memory) {
 ${memory.profile ? memory.profile.substring(0, 3000) : "ไม่มีข้อมูล"}
 
 === Dashboard / งานค้าง ===
-${memory.dashboard ? memory.dashboard.substring(0, 1500) : "ไม่มีข้อมูล"}`;
+${memory.dashboard ? memory.dashboard.substring(0, 1500) : "ไม่มีข้อมูล"}
+${LINE_STYLE}`;
 }
 
-function buildAlfredPrompt(memory) {
+export function buildAlfredPrompt(memory) {
   const now = new Date();
   const timeStr = now.toLocaleString("th-TH", { timeZone: "Asia/Bangkok", hour: "2-digit", minute: "2-digit" });
   const dateStr = now.toLocaleDateString("th-TH", { timeZone: "Asia/Bangkok", weekday: "long", day: "numeric", month: "long", year: "numeric" });
@@ -143,7 +206,8 @@ ${memory.profile ? memory.profile.substring(0, 3000) : "ไม่มีข้อ
 ${memory.routine ? memory.routine.substring(0, 1500) : "ไม่มีข้อมูล"}
 
 === งานที่ Alfred ดูแล ===
-${memory.dashboard ? memory.dashboard.substring(0, 1000) : "ไม่มีรายการ"}`;
+${memory.dashboard ? memory.dashboard.substring(0, 1000) : "ไม่มีรายการ"}
+${LINE_STYLE}`;
 }
 
 // Nicole เขียนลง Notion
@@ -207,7 +271,7 @@ ${currentContent.substring(0, 1500)}`;
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
+      model: MODEL_UTIL,
       max_tokens: 1500,
       messages: [{ role: "user", content: nicolePrompt }],
     }),
@@ -230,7 +294,7 @@ ${currentContent.substring(0, 1500)}`;
   } catch (e) {}
 }
 
-async function callClaude(systemPrompt, userText, env) {
+export async function callClaude(systemPrompt, userText, env) {
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -239,7 +303,7 @@ async function callClaude(systemPrompt, userText, env) {
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
+      model: MODEL_CHAT,
       max_tokens: 500,
       system: systemPrompt,
       messages: [{ role: "user", content: userText }],
@@ -250,11 +314,19 @@ async function callClaude(systemPrompt, userText, env) {
 }
 
 async function pushLine(text, token, userId) {
-  await fetch("https://api.line.me/v2/bot/message/push", {
-    method: "POST",
-    headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-    body: JSON.stringify({ to: userId, messages: [{ type: "text", text }] }),
-  });
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const res = await fetch("https://api.line.me/v2/bot/message/push", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ to: userId, messages: [{ type: "text", text }] }),
+      });
+      if (res.ok) return;
+      console.error(`LINE push failed (attempt ${attempt}):`, res.status, (await res.text()).slice(0, 200));
+    } catch (e) {
+      console.error(`LINE push error (attempt ${attempt}):`, e);
+    }
+  }
 }
 
 async function replyLine(replyToken, text, token) {
@@ -265,11 +337,53 @@ async function replyLine(replyToken, text, token) {
   });
 }
 
+// ===== บทสนทนาเช้าแบบโต้ตอบ (ฝั่ง Alfred) — รู้บริบทวันนี้ + เก็บ state =====
+export function buildAlfredConvoPrompt(memory, state, ctx = {}) {
+  const { preknownOff = false, holidayNote = "" } = ctx;
+  return `${buildAlfredPrompt(memory)}
+
+=== โหมดบทสนทนา (สำคัญ) ===
+นี่คือการตอบข้อความที่เจ้านายพิมพ์เข้ามา
+สถานะที่จำไว้ของวันนี้: ${JSON.stringify(state)}
+วันนี้เป็นวันหยุดที่รู้ล่วงหน้า (เสาร์/อาทิตย์ หรือวันหยุดในปฏิทิน): ${preknownOff ? "ใช่" : "ไม่ใช่"}${holidayNote ? `\nบันทึกในปฏิทินวันนี้: ${holidayNote}` : ""}
+
+วิธีปฏิบัติ:
+1. ถ้าเจ้านายบอกว่าตื่น/เพิ่งตื่น (ช่วงเช้า) → ทักว่า "อรุณสวัสดิ์ครับ" (ห้ามใช้ "ตื่นได้ดี") — ข้อนี้ทับกฎห้ามทักทายด้านบน
+2. เรื่องไปทำงาน:
+   - ถ้า "ไม่ใช่วันหยุดที่รู้ล่วงหน้า" และยังไม่รู้คำตอบ (goingToWork ว่าง และ workAsked ไม่ใช่ true) → ถามท้ายข้อความสั้น ๆ "วันนี้เจ้านายไปทำงานตามปกติไหมครับ" (ถามครั้งเดียว ไม่ถามซ้ำ)
+   - ถ้า "เป็นวันหยุดที่รู้ล่วงหน้า" → ห้ามถามเรื่องไปทำงานเด็ดขาด ให้ทักตามบริบทแทน: ถ้ามีบันทึกในปฏิทินให้พูดถึงตรง ๆ เช่น "วันนี้คุณท่าน<บันทึก> ขอให้สนุก/พักเต็มที่นะครับ" ถ้าเป็นเสาร์อาทิตย์ก็ทักวันหยุดสบาย ๆ
+3. ถ้าเจ้านายตอบว่า "ไป" → รับทราบสั้น ๆ ชวนเข้า Golden Time นั่งสมาธิตาม routine เช้า (พูดถึง Golden Time/สมาธิ ตรง ๆ) (set goingToWork=true)
+4. ถ้าเจ้านายตอบว่า "ไม่ไป":
+   - ถ้าเพราะป่วย/ไม่สบาย → ให้ Dr. Frey เข้ามาดูแลทันที (set goingToWork=false, reason)
+   - ถ้าไม่ใช่เพราะป่วย (พักผ่อน/ทำกิจกรรมอื่น/เคลียร์งาน) → Alfred รับทราบสั้น ๆ แล้ว "ถาม" ว่า "ให้ผมตามหมอเฟรมาดูแลไหมครับ" (set goingToWork=false, reason, freyOffered=true) — อย่าตามหมอเอง รอเจ้านายตอบรับก่อน ถ้าเจ้านายตอบรับค่อยให้ Frey เข้ามาในเทิร์นถัดไป ถ้าปฏิเสธก็จบ
+5. เมื่อ Dr. Frey เป็นคนพูด → เปิดประโยคแรกด้วย "หมอเฟรค่ะ" เสมอ ให้รู้ว่าเปลี่ยนคนพูด · ผู้หญิง ลงท้าย "ค่ะ" ทุกประโยค ห้ามใช้ "ครับ"
+
+ตอบกลับเป็น JSON เท่านั้น ห้ามมีข้อความอื่นนอก JSON:
+{"reply": "<ข้อความส่งเข้า LINE — ทำตามสไตล์การพิมพ์ข้างบนเคร่งครัด>", "set": {<อัปเดตเฉพาะที่เปลี่ยน เช่น "goingToWork": true หรือ false, "reason": "ป่วย/อื่น ๆ", "symptoms": "...", "workAsked": true — ถ้าไม่มีอะไรเปลี่ยนใส่ {}>}}`;
+}
+
+async function alfredConversationReply(userText, env) {
+  const memory = await buildMemory(env, true);
+  const state = await getDayState(env);
+  const wd = new Date().toLocaleString("en-US", { weekday: "short", timeZone: "Asia/Bangkok" });
+  const holidayNote = await holidayNoteToday(env);
+  const preknownOff = wd === "Sat" || wd === "Sun" || holidayNote !== "";
+  const raw = await callClaude(buildAlfredConvoPrompt(memory, state, { preknownOff, holidayNote }), userText, env);
+  let reply = raw, set = null;
+  try {
+    const j = JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
+    if (j.reply) reply = j.reply;
+    if (j.set && typeof j.set === "object") set = j.set;
+  } catch (e) { /* parse ไม่ได้ → ใช้ raw เป็นคำตอบ ไม่อัปเดต state */ }
+  if (set && Object.keys(set).length) await setDayState(env, set);
+  return reply;
+}
+
 async function processEvents(events, destination, env) {
   const isAlfred = destination === ALFRED_BOT_USER_ID;
   const token = isAlfred ? env.LINE_TOKEN_ALFRED : env.LINE_TOKEN;
-  const memory = await buildMemory(env, isAlfred);
-  const systemPrompt = isAlfred ? buildAlfredPrompt(memory) : buildJarvisPrompt(memory);
+  // Jarvis สร้าง systemPrompt ที่นี่ · Alfred สร้างเองใน alfredConversationReply (รู้ state ด้วย)
+  const systemPrompt = isAlfred ? null : buildJarvisPrompt(await buildMemory(env, false));
 
   for (const ev of events) {
     if (ev.type === "message" && ev.message?.type === "text") {
@@ -280,7 +394,10 @@ async function processEvents(events, destination, env) {
           await sendNewsAlert(env);
           continue;
         }
-        const reply = await callClaude(systemPrompt, userText, env);
+        // Alfred = บทสนทนาแบบรู้บริบทวันนี้ + เก็บ state · Jarvis = ตอบปกติ
+        const reply = isAlfred
+          ? await alfredConversationReply(userText, env)
+          : await callClaude(systemPrompt, userText, env);
         await replyLine(ev.replyToken, reply, token);
         // Nicole เก็บข้อมูลหลังบ้าน
         await runNicole(userText, reply, isAlfred, env);
@@ -315,9 +432,20 @@ async function sendFreyMorningCheck(env) {
   const freyPrompt = `คุณคือ Dr. Frey แพทย์ดูแลสุขภาพส่วนตัว ผู้หญิง อบอุ่น ห่วงใย เรียกผู้ใช้ว่า "เจ้านาย" ลงท้าย "ค่ะ" ทุกประโยค ห้ามใช้ "ครับ"
 ส่ง morning health check หลัง Golden Time กระชับ อ่านง่าย
 ถามอาการสุขภาพเช้า: รู้สึกยังไงบ้าง มีน้ำมูก ไอ หรือแน่นหน้าอกไหม + แนะนำเครื่องดื่มตามอาการ (น้ำอุ่น ขิง มะนาวผึ้ง)
-ถ้าเจ้านายตอบกลับว่ามีอาการ Alfred จะส่งรายงานให้ Frey ประเมินอีกครั้ง`;
+ถ้าเจ้านายตอบกลับว่ามีอาการ Alfred จะส่งรายงานให้ Frey ประเมินอีกครั้ง
+${LINE_STYLE}`;
   const text = await callClaude(freyPrompt, "ส่ง morning health check หลัง Golden Time", env);
   await pushLine(text, env.LINE_TOKEN_ALFRED, env.LINE_USER_ID);
+}
+
+// 06:00 — พาโพล่าออกไปเดินเล่นข้างนอก
+async function sendWalkPolar(env) {
+  await alfredSend(`ได้เวลาพาโพล่าออกไปเดินเล่นข้างนอกแล้วครับ ประมาณ 15 นาที แสงแดดเช้าช่วยตั้งนาฬิกาชีวภาพให้สดชื่นทั้งวัน ทักสั้น ๆ อบอุ่น 1-2 ประโยค`, env);
+}
+
+// 06:15 — กลับบ้าน ให้อาหารโพล่า + อาบน้ำ
+async function sendBackShower(env) {
+  await alfredSend(`เดินกับโพล่าเสร็จแล้ว ได้เวลากลับเข้าบ้าน ให้อาหารโพล่า แล้วไปอาบน้ำแต่งตัวได้เลยครับ ทักสั้น ๆ 1-2 ประโยค`, env);
 }
 
 // Jarvis brief — ดึงจาก DASHBOARD.md
@@ -359,26 +487,34 @@ async function checkTraffic(env) {
     });
     const data = await res.json();
     const route = data.routes?.[0];
-    if (!route) return null;
+    if (!route) { console.error("checkTraffic: no route", JSON.stringify(data).slice(0, 300)); return null; }
     const mins = Math.round(parseInt(route.duration) / 60);
     const km = Math.round(route.distanceMeters / 1000);
     return { mins, km };
   } catch (e) {
+    console.error("checkTraffic failed:", e);
     return null;
   }
 }
 
-// 06:35 — ก่อนออกบ้าน + เช็คการจราจร
+// 06:30 — ก่อนออกบ้าน + เช็คการจราจรจริงจาก Google Maps
 async function sendPreDeparture(env) {
   const traffic = await checkTraffic(env);
-  let trafficMsg = "";
+  // ข้อมูลจราจรต้องเป็น "ตัวเลขจริง" — สร้างเป็นข้อความตรง ๆ ไม่ส่งผ่าน LLM ซ้ำ ไม่งั้นตัวเลขจะเพี้ยน
+  let trafficLine;
   if (traffic) {
     const { mins, km } = traffic;
-    if (mins > 75) trafficMsg = `\n\n🚗 รถติดมากครับ ใช้เวลา ~${mins} นาที (${km} กม.) ควรออกเร็วขึ้นครับ`;
-    else if (mins > 60) trafficMsg = `\n\n🚗 รถติดนิดหน่อยครับ ใช้เวลา ~${mins} นาที ออกตอนนี้ทันครับ`;
-    else trafficMsg = `\n\n🚗 การจราจรปกติครับ ใช้เวลา ~${mins} นาที ออกได้เลยครับ`;
+    if (mins > 75) trafficLine = `เส้นทางไปทำงานตอนนี้รถติดมากครับ ใช้เวลาประมาณ ${mins} นาที (${km} กม.) ออกเร็วขึ้นอีกหน่อยจะดีกว่าครับ`;
+    else if (mins > 60) trafficLine = `เส้นทางไปทำงานติดนิดหน่อยครับ ใช้เวลาประมาณ ${mins} นาที (${km} กม.) ออกตอนนี้ยังทันครับ`;
+    else trafficLine = `การจราจรปกติครับ ใช้เวลาประมาณ ${mins} นาที (${km} กม.) ออกได้สบาย ๆ ครับ`;
+  } else {
+    trafficLine = `ตอนนี้ผมเช็คสภาพจราจรไม่ได้ครับ เผื่อเวลาออกบ้านสักหน่อยนะครับ`;
   }
-  await alfredSend(`ได้เวลาออกบ้านแล้วครับ คุณท่าน${trafficMsg} ขอให้เดินทางปลอดภัยครับ`, env);
+  // ให้ Alfred ทักนำสั้น ๆ เป็นธรรมชาติ แล้วต่อด้วยข้อมูลจราจรจริง
+  const memory = await buildMemory(env, true);
+  const system = buildAlfredPrompt(memory);
+  const intro = await callClaude(system, `ใกล้เวลาออกบ้านแล้ว (ประมาณ 06:30) ทักสั้น ๆ 1 ประโยคว่าได้เวลาเตรียมตัวออกบ้าน ห้ามพูดถึงการจราจรหรือตัวเลขเวลาเดินทางเอง เดี๋ยวผมต่อข้อมูลจราจรให้ท้ายเอง`, env);
+  await pushLine(`${intro}\n\n${trafficLine}\n\nเดินทางปลอดภัยนะครับ`, env.LINE_TOKEN_ALFRED, env.LINE_USER_ID);
 }
 
 // ============ James Morning Brief — RSS (Bloomberg) + Notion ============
@@ -429,7 +565,7 @@ async function callClaudeNews(prompt, env) {
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-    body: JSON.stringify({ model: "claude-haiku-4-5-20251001", max_tokens: 2500, messages: [{ role: "user", content: prompt }] }),
+    body: JSON.stringify({ model: MODEL_UTIL, max_tokens: 2500, messages: [{ role: "user", content: prompt }] }),
   });
   const data = await res.json();
   return data.content?.[0]?.text || "[]";
@@ -541,6 +677,25 @@ async function sendWeekendLunchCheck(env) {
   await alfredSend(`กลางวันวัน${isSat ? "เสาร์" : "อาทิตย์"} ส่งสั้นๆ เช็คว่ากินข้าวหรือยัง + ${isSat ? "เตือน meal prep ช่วงบ่ายถ้าสะดวก" : "เตือนพักผ่อน เติมพลังก่อนอาทิตย์ใหม่"} + วิตามิน`, env);
 }
 
+// ===== ตารางเวลา routine ประจำวัน =====
+// t = เวลาไทยแบบ HHMM (ต้องเป็นช่วง 5 นาที) · days = 'all' | 'weekday' | 'weekend'
+// เพิ่ม/แก้เวลาในอนาคต = เพิ่ม/แก้บรรทัดในตารางนี้ที่เดียว
+const SCHEDULE = [
+  { t: 400,  days: "all",     fn: sendMorningWakeup },      // ตื่น + routine เช้า
+  { t: 430,  days: "all",     fn: sendFreyMorningCheck },   // Frey เช็คอาการหลัง Golden
+  { t: 600,  days: "all",     fn: sendWalkPolar },          // พาโพล่าเดินข้างนอก
+  { t: 615,  days: "all",     fn: sendBackShower },         // กลับบ้าน ให้อาหารโพล่า + อาบน้ำ
+  { t: 630,  days: "weekday", fn: sendPreDeparture },       // ก่อนออกบ้าน + เช็คจราจร
+  { t: 635,  days: "weekend", fn: sendWeekendMorningBrief },// บรีฟวันหยุด (ไม่มีจราจร)
+  { t: 800,  days: "all",     fn: sendNewsAlert },          // ข่าวเช้า James
+  { t: 800,  days: "weekday", fn: sendJarvisBrief },        // Jarvis morning brief (วันทำงาน)
+  { t: 1200, days: "weekday", fn: sendLunchCheck },         // เช็คกลางวัน
+  { t: 1200, days: "weekend", fn: sendWeekendLunchCheck },  // เช็คกลางวันวันหยุด
+  { t: 1730, days: "weekday", fn: sendEveningPrep },        // ก่อนเลิกงาน
+  { t: 2030, days: "all",     fn: sendEveningBrief },       // ปิดวัน + Frey checklist
+  { t: 2100, days: "all",     fn: sendBedtime },            // เตรียมนอน
+];
+
 export default {
   async fetch(request, env, ctx) {
     if (request.method !== "POST") return new Response("Eliné webhook OK", { status: 200 });
@@ -559,30 +714,24 @@ export default {
     const now = new Date();
     const h = parseInt(now.toLocaleString("en-US", { hour: "numeric", hour12: false, timeZone: "Asia/Bangkok" }));
     const m = parseInt(now.toLocaleString("en-US", { minute: "numeric", timeZone: "Asia/Bangkok" }));
-    const dow = parseInt(now.toLocaleString("en-US", { weekday: "short", timeZone: "Asia/Bangkok" }) === "Sat" ? 6 :
-                now.toLocaleString("en-US", { weekday: "short", timeZone: "Asia/Bangkok" }) === "Sun" ? 0 : 1);
-    const isWeekend = dow === 0 || dow === 6;
-    const hm = h * 100 + m;
+    const nowMin = h * 60 + m;
 
-    // เช้า — ทุกวันเหมือนกัน
-    if (hm === 400) await sendMorningWakeup(env);
-    if (hm === 430) await sendFreyMorningCheck(env);
+    // สวิตช์เดียวคุมทั้งวัน — 'weekday' = วันทำงาน, 'weekend' = วันหยุด/อยู่บ้าน
+    // วันทำงาน = จันทร์-ศุกร์ และไม่ใช่วันหยุดในปฏิทิน และเจ้านายไม่ได้บอกว่าไม่ไป
+    const workday = await isWorkdayToday(env);
 
-    if (isWeekend) {
-      // Weekend — ไม่มี traffic, เช็คงาน YouTube/ธุรกิจแทน
-      if (hm === 630) await sendWeekendMorningBrief(env);
-      if (hm === 800) await sendNewsAlert(env);
-      if (hm === 1200) await sendWeekendLunchCheck(env);
-    } else {
-      // Weekday
-      if (hm === 630)  await sendPreDeparture(env);
-      if (hm === 800)  { await sendNewsAlert(env); await sendJarvisBrief(env); }
-      if (hm === 1200) await sendLunchCheck(env);
-      if (hm === 1730) await sendEveningPrep(env);
+    // ห่อทุก task: ถ้าอันใดอันหนึ่งพัง ตัวอื่นในรอบเดียวกันยังส่งต่อได้
+    const run = async (fn) => {
+      try { await fn(env); } catch (e) { console.error("scheduled task failed:", fn.name, e); }
+    };
+
+    // cron ยิงทุก 5 นาที — วน SCHEDULE แล้วส่งงานที่ "ถึงเวลาแล้วในรอบนี้"
+    // หน้าต่าง 5 นาที = ยิงครั้งเดียวต่อช่วง และทน cron คลาดได้ ~5 นาทีโดยไม่ตกหล่น
+    for (const s of SCHEDULE) {
+      if (s.days === "weekday" && !workday) continue;
+      if (s.days === "weekend" && workday) continue;
+      const taskMin = Math.floor(s.t / 100) * 60 + (s.t % 100);
+      if (nowMin >= taskMin && nowMin < taskMin + 5) await run(s.fn);
     }
-
-    // เย็น/นอน — ทุกวันเหมือนกัน
-    if (hm === 2030) await sendEveningBrief(env);
-    if (hm === 2100) await sendBedtime(env);
   },
 };

@@ -2,9 +2,14 @@ name = "eline-line-webhook"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
-# Morning Brief ทุกเช้า 04:00 น. ไทย (21:00 UTC)
+# worker เช็คเวลาเองจากตาราง SCHEDULE ว่าต้องส่งอะไร
 [triggers]
-crons = ["*/30 * * * *"]  # ทุก 30 นาที — worker เช็คเวลาเองว่าต้องส่งอะไร
+crons = ["*/5 * * * *"]  # ทุก 5 นาที — รองรับ routine ที่ห่างกัน 5/15 นาที + กัน cron คลาดนาที
+
+# State รายวัน — จำบทสนทนาเช้า (ตื่นยัง / อาการ / ไปทำงานไหม)
+[[kv_namespaces]]
+binding = "STATE"
+id = "48ce4bb36c014814bfff8a49bef31bad"
 
 # Secrets (ตั้งด้วยคำสั่ง ไม่เก็บในไฟล์):
 #   npx wrangler secret put LINE_TOKEN
