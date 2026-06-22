@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>หลักสูตร 30 วัน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,sans-serif;background:#f5f5f7;color:#1a1a2e;font-size:15px;}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;}
+
+/* NAV */
+.main-nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e0e0e0;display:flex;}
+.main-nav button{flex:1;padding:14px 8px;background:none;font-size:14px;font-weight:600;color:#999;border-bottom:3px solid transparent;}
+.main-nav button.active{color:#1a1a2e;border-bottom-color:#1a1a2e;}
+
+/* SECTION */
+.sec{display:none;padding:16px;}
+.sec.on{display:block;}
+
+/* PAGE HEADER */
+.ph h1{font-size:20px;font-weight:700;margin-bottom:4px;}
+.ph p{font-size:13px;color:#777;margin-bottom:16px;}
+
+/* WEEK TABS */
+.week-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.week-tabs button{padding:10px 8px;border-radius:12px;border:2px solid;font-size:13px;font-weight:600;text-align:center;line-height:1.4;background:#fff;}
+.wt0{border-color:#1565c0;color:#1565c0;}.wt0.on{background:#1565c0;color:#fff;}
+.wt1{border-color:#6a1b9a;color:#6a1b9a;}.wt1.on{background:#6a1b9a;color:#fff;}
+.wt2{border-color:#2e7d32;color:#2e7d32;}.wt2.on{background:#2e7d32;color:#fff;}
+.wt3{border-color:#e65100;color:#e65100;}.wt3.on{background:#e65100;color:#fff;}
+
+/* WEEK OVERVIEW */
+.wo{border-radius:12px;padding:16px;margin-bottom:14px;font-size:14px;line-height:1.8;}
+.wo0{background:#e8f4fd;border-left:4px solid #1565c0;}
+.wo1{background:#f3e5f5;border-left:4px solid #6a1b9a;}
+.wo2{background:#e8f5e9;border-left:4px solid #2e7d32;}
+.wo3{background:#fff3e0;border-left:4px solid #e65100;}
+.wo h3{font-size:15px;margin-bottom:8px;}
+.wo p{margin-bottom:6px;}
+
+/* DAY SCROLL */
+.day-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.day-scroll::-webkit-scrollbar{display:none;}
+.day-scroll button{flex-shrink:0;width:40px;height:40px;border-radius:10px;border:2px solid;background:#fff;font-size:13px;font-weight:700;}
+.db0{border-color:#1565c0;color:#1565c0;}.db0.on{background:#1565c0;color:#fff;}
+.db1{border-color:#6a1b9a;color:#6a1b9a;}.db1.on{background:#6a1b9a;color:#fff;}
+.db2{border-color:#2e7d32;color:#2e7d32;}.db2.on{background:#2e7d32;color:#fff;}
+.db3{border-color:#e65100;color:#e65100;}.db3.on{background:#e65100;color:#fff;}
+
+/* DAY CARD */
+.day-card{background:#fff;border-radius:14px;border:1px solid #e0e0e0;padding:18px;}
+.day-title{font-size:17px;font-weight:700;margin-bottom:14px;}
+.lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#999;margin-bottom:6px;}
+.theory-box{background:#f8f9fa;border-radius:10px;padding:12px;font-size:14px;line-height:1.8;margin-bottom:14px;}
+.prac-col{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.pi{border-radius:10px;padding:12px;font-size:13px;line-height:1.7;}
+.pi-m{background:#fff8e1;border-left:3px solid #ffa000;}
+.pi-a{background:#e3f2fd;border-left:3px solid #1976d2;}
+.pi-e{background:#fce4ec;border-left:3px solid #c2185b;}
+.pi b{display:block;font-size:12px;margin-bottom:4px;}
+.jbox{background:#f1f8e9;border-radius:10px;padding:12px;font-size:13px;line-height:1.8;border-left:3px solid #558b2f;font-style:italic;margin-bottom:14px;}
+.nav-row{display:flex;justify-content:space-between;align-items:center;}
+.nav-row button{padding:10px 18px;border-radius:10px;border:1px solid #ddd;background:#f5f5f5;font-size:14px;font-weight:600;}
+.nav-row button:disabled{opacity:.3;}
+.nav-row span{font-size:12px;color:#999;}
+.review-box{margin-top:14px;border-radius:12px;padding:14px;border:2px dashed #ccc;background:#fafafa;}
+.review-box h4{font-size:14px;font-weight:700;margin-bottom:10px;}
+.ck-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.ck-row button{flex-shrink:0;width:24px;height:24px;border-radius:6px;border:2px solid #ccc;background:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0;}
+.ck-row button.on{background:#4caf50;border-color:#4caf50;color:#fff;}
+.ck-row span{font-size:13px;line-height:1.7;}
+
+/* GUIDE */
+.cat-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.cat-tabs::-webkit-scrollbar{display:none;}
+.cat-tabs button{flex-shrink:0;padding:8px 14px;border-radius:20px;border:2px solid;font-size:13px;font-weight:600;white-space:nowrap;background:#fff;}
+.ct-base{border-color:#880e4f;color:#880e4f;}.ct-base.on{background:#880e4f;color:#fff;}
+.ct-d{border-color:#0d47a1;color:#0d47a1;}.ct-d.on{background:#0d47a1;color:#fff;}
+.ct-n{border-color:#4a148c;color:#4a148c;}.ct-n.on{background:#4a148c;color:#fff;}
+.ct-a{border-color:#1b5e20;color:#1b5e20;}.ct-a.on{background:#1b5e20;color:#fff;}
+.ct-l{border-color:#e65100;color:#e65100;}.ct-l.on{background:#e65100;color:#fff;}
+.tech-list{display:flex;flex-direction:column;gap:8px;}
+.tech-list button{background:#fff;border-radius:12px;border:1px solid #e0e0e0;padding:14px;text-align:left;width:100%;}
+.tech-list button.on{border-width:2px;}
+.tname{font-weight:700;font-size:14px;margin-bottom:3px;}
+.twhen{font-size:12px;color:#777;}
+.detail-card{background:#fff;border-radius:14px;border:1px solid #e0e0e0;padding:18px;}
+.detail-title{font-size:17px;font-weight:700;margin-bottom:6px;}
+.detail-meta{font-size:12px;color:#777;margin-bottom:10px;}
+.desc-box{background:#f8f9fa;border-radius:10px;padding:12px;font-size:13px;line-height:1.8;margin-bottom:14px;}
+.tools-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.tool{padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;background:#f0f0f0;border:1px solid #ddd;}
+.step{display:flex;gap:12px;margin-bottom:14px;}
+.snum{flex-shrink:0;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+.sbody{flex:1;}
+.slbl{font-weight:700;font-size:14px;margin-bottom:3px;}
+.sdet{font-size:13px;line-height:1.75;color:#444;}
+.stip{margin-top:6px;font-size:12px;padding:8px 10px;border-radius:8px;background:#fffde7;border-left:3px solid #fbc02d;line-height:1.7;}
+.mistakes{margin-top:14px;padding:12px;border-radius:10px;background:#fff3e0;border-left:3px solid #ef6c00;}
+.mistakes h5{font-size:12px;font-weight:700;color:#bf360c;margin-bottom:6px;}
+.mistakes p{font-size:12px;line-height:1.8;color:#5d4037;}
+.back-btn{padding:10px 16px;border-radius:10px;border:1px solid #ddd;background:#f5f5f5;font-size:13px;font-weight:600;margin-bottom:14px;display:block;}
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <button class="active" id="nav-course" onclick="showSec('course')">📿 หลักสูตร 30 วัน</button>
+  <button id="nav-guide" onclick="showSec('guide')">📖 คู่มือวิธีทำ</button>
+</nav>
+
+<!-- COURSE -->
+<div id="sec-course" class="sec on">
+  <div class="ph"><h1>หลักสูตร 30 วัน</h1><p>Meditation & Manifestation | เป้าหมาย: เปลี่ยน Identity | 60–90 นาที/วัน</p></div>
+  <div class="week-tabs">
+    <button class="wt0 on" id="wt0" onclick="switchWeek(0)">Week 1<br><small>รื้อตัวเอง</small></button>
+    <button class="wt1" id="wt1" onclick="switchWeek(1)">Week 2<br><small>สร้างพลังงาน</small></button>
+    <button class="wt2" id="wt2" onclick="switchWeek(2)">Week 3<br><small>Reality ใหม่</small></button>
+    <button class="wt3" id="wt3" onclick="switchWeek(3)">Week 4<br><small>End State</small></button>
+  </div>
+  <div id="week-ov"></div>
+  <div class="day-scroll" id="day-scroll"></div>
+  <div id="day-card"></div>
+</div>
+
+<!-- GUIDE -->
+<div id="sec-guide" class="sec">
+  <div id="glist">
+    <div class="ph"><h1>คู่มือวิธีทำ</h1><p>เลือก Teacher → เลือก Technique → อ่านขั้นตอน</p></div>
+    <div class="cat-tabs" id="cat-tabs"></div>
+    <div class="tech-list" id="tech-list"></div>
+  </div>
+  <div id="gdetail" style="display:none;padding:0;">
+    <button class="back-btn" onclick="backToList()">← กลับ</button>
+    <div id="gdetail-content"></div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const weeks=[
+{title:"Week 1 (วัน 1–7): รู้จักตัวเอง & รื้อ Identity เก่า",
+theory:"<p><strong>Core Concept:</strong> Identity ที่มีอยู่ตอนนี้ไม่ใช่ 'ตัวจริง' มันคือชุดความคิดและ reaction ที่ถูกโปรแกรมมาตลอดชีวิต Dispenza บอกว่า 95% ของความคิดในวันนี้เหมือนกับเมื่อวาน</p><p><strong>Technique หลัก:</strong> Breaking the Habit of Being Yourself + Mirror Work</p>",
+days:[
+{day:1,t:"รู้จักสมอง & ทำไมต้องสมาธิ",th:"สมองไม่รู้ความต่างระหว่างจินตนาการกับความจริง นี่คือพื้นฐานของ Dispenza Neural pathways ที่ใช้บ่อยจะแข็งแรงขึ้น ฝึกใหม่บ่อยพอก็สร้าง pathway ใหม่ได้ วันนี้เรียนหายใจ Box Breathing ก่อน",m:"Box Breathing 10 นาที: หายใจเข้า 4 วิ → กลั้น 4 วิ → ออก 4 วิ → กลั้น 4 วิ ทำ 10 รอบ แล้วนั่งเงียบ 10 นาที สังเกตความคิดที่วิ่งเข้ามา",a:"Segment Intending: ก่อนทำสิ่งใด ๆ หยุด 30 วิ ตั้งใจว่าต้องการให้กิจกรรมนั้นเป็นอย่างไร",e:"เขียน Journal 20 นาที ตอบคำถาม journal prompt",j:"ฉันรู้สึกว่าตัวเองเป็นคนแบบไหน? มีความเชื่ออะไรเกี่ยวกับตัวเองที่ไม่แน่ใจว่าจริงหรือเปล่า?"},
+{day:2,t:"Identity คืออะไร",th:"Identity ไม่ใช่บุคลิก มันคือชุดความเชื่อว่าตัวเองเป็นใคร เชื่อว่า 'ฉันไม่เก่งพอ' สมองก็สร้างหลักฐานมายืนยัน Neville เรียกว่า Assumption สิ่งที่ assume ว่าเป็นจริงจะกลายเป็นจริง",m:"Mirror Work 5 นาที: มองกระจก พูดว่า 'ฉันรักและยอมรับตัวเองอย่างที่เป็น' สังเกตความรู้สึก | Box Breathing 5 นาที | นั่งเงียบ 10 นาที สังเกต self-talk",a:"เขียนรายการ 'ฉันเชื่อว่าตัวเองเป็นคนที่...' อย่างน้อย 10 ข้อ",e:"อ่านรายการที่เขียน ถามแต่ละข้อว่า 'นี่คือความจริง หรือแค่สิ่งที่ถูกสอนมา?'",j:"ความเชื่อข้อไหนที่อยากทิ้งมากที่สุด? มันมาจากไหน?"},
+{day:3,t:"สังเกต Automatic Reaction",th:"95% ของพฤติกรรมมาจาก subconscious ทำโดยไม่รู้ตัว เมื่อโกรธ กลัว เสียใจ ร่างกายปล่อย stress hormones การฝึกคือการ 'จับได้' ก่อนที่จะทำตาม pattern นั้น",m:"Box Breathing 5 นาที | Dispenza Meditation 20 นาที: โฟกัสที่ลมหายใจ ทุกครั้งที่ใจวอก กลับมาที่ลมหายใจ ไม่ตัดสิน",a:"ทุกครั้งที่มีอารมณ์แรง หยุด 10 วิ ถามว่า 'นี่คือ reaction เก่า หรือ reaction ของ Her คนใหม่?'",e:"Mirror Work 5 นาที | Journal 15 นาที",j:"วันนี้มี reaction ไหนที่เป็น pattern เก่า? ถ้าเป็นคนใหม่ที่อยากเป็น ฉันจะ react ยังไงแทน?"},
+{day:4,t:"ทำไมอดีตดึงเราไว้",th:"ความทรงจำที่มี emotional charge สูงถูกเก็บในร่างกายด้วย ไม่ใช่แค่ในสมอง ร่างกายเคยชินกับ feeling บางอย่างจนรู้สึกว่า 'ปลอดภัย' แม้จะไม่ดี Dispenza เรียกว่า body as mind",m:"Box Breathing 5 นาที | Breaking the Habit Meditation 20 นาที: นั่งตั้งตรง หายใจลึก ตั้งใจว่าวันนี้จะไม่เป็นคนเดิม",a:"เขียนรายการ: ความรู้สึกอะไรที่รู้สึกบ่อยจนชิน เช่น กังวล โดดเดี่ยว ไม่พอ",e:"Revision 10 นาที: นึกถึงเหตุการณ์แย่ในวัน rewrite ในหัวให้เป็นเวอร์ชันดี",j:"ร่างกายฉันเคยชินกับความรู้สึกอะไร? ความรู้สึกนั้นให้ประโยชน์อะไรกับฉันบ้าง?"},
+{day:5,t:"กำหนด 'Her' — ตัวตนใหม่",th:"Neville บอกว่า 'Assume the feeling of the wish fulfilled' ไม่ใช่แค่อยากได้ แต่ต้องเป็นคนที่มีสิ่งนั้นแล้ว วันนี้จะกำหนดว่า Her คือใคร คิดยังไง รู้สึกยังไง",m:"Mirror Work 5 นาที ในฐานะ Her | Meditation 20 นาที โฟกัสที่ความรู้สึกว่าเป็น Her แล้ว",a:"เขียน Her Profile: เธอคิดยังไงกับตัวเอง? ตื่นเช้ามาด้วยความรู้สึกอะไร? React ต่อ challenge ยังไง?",e:"อ่าน Her Profile ก่อนนอน | SATS เบื้องต้น: ก่อนหลับ นึกถึง Her ว่าเธอเป็นยังไง",j:"เขียนวันในชีวิตของ Her ตั้งแต่ตื่นเช้าถึงเข้านอน ใช้ present tense ทั้งหมด"},
+{day:6,t:"ปล่อยวาง — Letting Go of the Old",th:"Identity เก่าจะไม่หายไปง่าย ๆ มันจะดึงกลับผ่าน habitual thought และ body sensation การปล่อยวางไม่ใช่การต่อสู้ แต่คือการเลือกไม่ give energy ให้มัน",m:"Breaking the Habit Meditation 30 นาที เน้นที่การ surrender ตัวตนเก่า",a:"Isn't It Wonderful (Neville): พูดซ้ำในใจตลอดวัน เพื่อยกพลังงาน",e:"Rampage of Appreciation: เขียนสิ่งที่ appreciate อย่างน้อย 20 ข้อ 15 นาที",j:"อะไรที่ยังยึดติดกับตัวตนเก่าอยู่? ฉันกลัวอะไรถ้าไม่เป็นคนเดิมอีกต่อไป?"},
+{day:7,t:"Weekly Review — สัปดาห์ที่ 1",th:"วันนี้ไม่มี technique ใหม่ ทบทวนสิ่งที่เรียนรู้ใน 6 วัน สังเกตว่ามีอะไรเปลี่ยนไปบ้างแม้เล็กน้อย ทุก micro-shift คือหลักฐานว่าสมองกำลังเปลี่ยน",m:"นั่งเงียบ 30 นาที ไม่มี agenda แค่อยู่กับตัวเอง",a:"อ่าน journal ทั้ง 6 วันที่ผ่านมา",e:"เขียนสรุป Week 1 | SATS ก่อนนอน",j:"ใน 7 วันที่ผ่านมา ฉันสังเกตเห็นอะไรในตัวเองบ้าง? มี reaction ไหนที่เริ่มเปลี่ยนไป?",r:true}
+],review:["ฉันทำ Box Breathing ทุกเช้าครบ 7 วัน","ฉันสามารถนั่งเงียบได้ 10+ นาทีโดยไม่วอก","ฉันระบุ belief เก่าที่อยากเปลี่ยนได้อย่างน้อย 3 ข้อ","ฉันเขียน Her Profile ชัดเจน","ฉันลอง SATS ก่อนนอนอย่างน้อย 3 วัน","ฉันทำ Revision เมื่อวันมีเหตุการณ์ไม่ดี"]},
+{title:"Week 2 (วัน 8–14): สร้างพลังงานใหม่ & Elevated Emotions",
+theory:"<p><strong>Core Concept:</strong> Dispenza บอกว่า emotion คือ signal ที่ส่งออกไปยัง quantum field — universe ตอบสนองต่อ frequency ของความรู้สึก ไม่ใช่คำพูด</p><p><strong>Technique หลัก:</strong> Heart Coherence + BOTEC + Rampage of Appreciation</p>",
+days:[
+{day:8,t:"Heart Coherence — หัวใจกับสมองสอดคล้องกัน",th:"เมื่อหัวใจและสมองสอดคล้องกัน สมองทำงานได้ดีขึ้นและส่งสัญญาณ electromagnetic ออกไปแรงขึ้น Heart Coherence เกิดจาก elevated emotions จริง ๆ ไม่ใช่แค่คิดว่าดีใจ",m:"Heart Coherence 15 นาที: มือซ้ายวางที่หัวใจ หายใจเข้า 5 วิ ออก 5 วิ สร้าง feeling gratitude ในหัวใจจริง ๆ | Mirror Work 5 นาที ในฐานะ Her",a:"ทุกครั้งที่รู้สึกเครียด ทำ Heart Coherence ย่อ 2 นาที",e:"SATS 10–15 นาที: ก่อนหลับ visualize scene พร้อม feeling ว่าสำเร็จแล้ว",j:"วันนี้ generate feeling gratitude ได้มากแค่ไหน? รู้สึกที่ใดในร่างกาย?"},
+{day:9,t:"Blessing of the Energy Centers (BOTEC)",th:"BOTEC คือ Dispenza's chakra meditation เปิดพลังงานทั้ง 7 จุดโดยใช้ elevated emotions ส่งไปยังแต่ละ energy center ทำให้ร่างกายออกจาก survival mode เข้าสู่ creative mode",m:"BOTEC 30–40 นาที: นั่งตั้งตรง หายใจลึก โฟกัสที่แต่ละ energy center ตั้งแต่ฐานกระดูกสันหลังถึงกระหม่อม ส่ง love/gratitude ไปยังแต่ละจุด",a:"Segment Intending ทุก transition ในวัน",e:"Revision + Journal",j:"ระหว่างทำ BOTEC รู้สึกที่ energy center ไหนชัดเจนที่สุด? ไหนที่รู้สึกว่า 'ติด'?"},
+{day:10,t:"Scripting — เขียนจดหมายจากอนาคต",th:"Scripting ของ Abraham Hicks คือการเขียน Dear Universe ในฐานะที่ wish fulfilled แล้ว เขียนด้วย present/past tense ราวกับมันเกิดขึ้นแล้ว",m:"Heart Coherence 10 นาที | Scripting 20 นาที: เขียนจดหมายขอบคุณ Universe ในฐานะที่ identity ใหม่เกิดขึ้นแล้ว",a:"Isn't It Wonderful ในใจตลอดวัน",e:"SATS ก่อนนอน",j:"อ่าน script ที่เขียน รู้สึกอะไรขณะอ่าน? มีส่วนไหนที่รู้สึก 'ฝืน' หรือไม่เชื่อ?"},
+{day:11,t:"Focus Wheel — เปลี่ยน Belief ทีละขั้น",th:"Focus Wheel ใช้สำหรับ shift belief ที่ resistant เริ่มจาก statement ที่เชื่อได้ 100% แล้วค่อย ๆ เลื่อนไปหา belief ที่อยากมี แต่ละขั้นต้องเชื่อได้จริง",m:"BOTEC 20 นาที | Focus Wheel 20 นาที: เลือก 1 belief เก่าที่ต้องการเปลี่ยน วาด wheel เขียน statement วนออกไป 10 ขั้น",a:"เลือก statement ที่เชื่อมากที่สุด 3 ข้อ พูดซ้ำตลอดวัน",e:"Mirror Work + Journal",j:"Belief ที่เลือกเปลี่ยนวันนี้ ส่งผลต่อชีวิตยังไงบ้างในแบบที่ไม่ต้องการ?"},
+{day:12,t:"Living in the End — เป็นเธอตอนนี้เลย",th:"Neville บอกว่า manifestation ไม่ใช่ process ที่ต้องรอ 'Live in the end' คือดำเนินชีวิตทุกวินาทีราวกับเป็น Her แล้ว ไม่ใช่ act แต่เป็น",m:"Heart Coherence 10 นาที ในฐานะ Her | ก่อนลุกจากเตียง ถามตัวเองว่า 'Her จะเริ่มวันนี้ยังไง?'",a:"ทุกตัดสินใจเล็กน้อย ถามว่า 'Her จะเลือกอะไร?'",e:"I Remember When: เขียนว่า 'ฉันจำได้ว่าตอนที่ยังเป็น [ตัวตนเก่า] มันรู้สึกยังไง แต่ตอนนี้...' | SATS",j:"วันนี้ฉัน 'เป็น Her' ในช่วงไหนบ้าง? มีช่วงไหนที่กลับไปเป็น pattern เก่าโดยไม่รู้ตัว?"},
+{day:13,t:"Turning Your Love Inward — Self-Worth",th:"Dispenza's Turning Your Love Inward ช่วย strengthen self-worth ซึ่งเป็นรากฐานของ identity ใหม่ ถ้า Her มี self-worth สูง ทุก manifestation จะ align กับ identity นั้น",m:"Turning Your Love Inward 30 นาที: ส่งความรักและการยอมรับไปยังตัวเอง | Mirror Work 10 นาที",a:"ทุกครั้งที่ judge ตัวเอง หยุด พูดว่า 'Her ไม่พูดแบบนี้กับตัวเอง'",e:"Rampage of Appreciation เน้นที่ตัวเอง: เขียน 10 สิ่งที่ appreciate ในตัวเอง",j:"ฉัน 'สมควร' ได้รับสิ่งที่ต้องการไหม? ถ้ายัง belief อะไรที่บอกว่าไม่สมควร?"},
+{day:14,t:"Weekly Review — สัปดาห์ที่ 2",th:"ทบทวน Week 2: elevated emotions generate ได้แค่ไหน? Heart Coherence รู้สึกต่างจากเดิมไหม? ถ้ายังยาก นั่นคือสัญญาณว่า belief ยังต้าน ไม่ใช่ล้มเหลว",m:"BOTEC 30 นาที ทบทวนทุก energy center",a:"Scripting รอบใหม่ เปรียบเทียบกับ script สัปดาห์แล้ว",e:"SATS ก่อนนอน",j:"ตอนนี้รู้สึกกับ Her ต่างจากวันที่ 5 ยังไง? เธอชัดขึ้นไหม?",r:true}
+],review:["ฉัน generate Heart Coherence ได้ on-demand แล้ว","ฉันทำ BOTEC ครบอย่างน้อย 4 วัน","ฉันเขียน Scripting ได้โดยไม่รู้สึกฝืน","ฉันลอง Living in the End ในชีวิตประจำวันได้","ฉันทำ SATS ก่อนนอนทุกคืน","Self-worth รู้สึกสูงขึ้นจาก Week 1"]},
+{title:"Week 3 (วัน 15–21): สร้าง Mental Reality & ฝึก Visualization",
+theory:"<p><strong>Core Concept:</strong> Dispenza บอกว่า Mental Rehearsal ที่ทำสม่ำเสมอจะเปลี่ยน neural pathway ได้เทียบเท่ากับการทำจริง ๆ</p><p><strong>Technique หลัก:</strong> Tuning Into New Potentials + Mental Rehearsal + SATS เต็มรูปแบบ</p>",
+days:[
+{day:15,t:"Mental Rehearsal — ซ้อมใน Mind",th:"Mental Rehearsal ของ Dispenza ใช้ในการเตรียมตัวสำหรับชีวิตใหม่ ใส่ detail ทุกอย่าง สภาพแวดล้อม คนรอบข้าง สิ่งที่พูด สิ่งที่รู้สึก ทำซ้ำจนร่างกาย respond ราวกับเกิดขึ้นจริง",m:"Mental Rehearsal 30 นาที: เลือก 1 scene จากชีวิตของ Her visualize ทุก sense | Heart Coherence 10 นาที",a:"Segment Intending ก่อนทุก meeting/task สำคัญ",e:"SATS เต็มรูปแบบ: เลือก scene เดียวกัน loop จนหลับ",j:"Scene ที่ visualize วันนี้ รู้สึก 'real' แค่ไหน 1–10? อะไรที่ทำให้ฟีลขึ้นหรือลง?"},
+{day:16,t:"Tuning Into New Potentials",th:"Dispenza's Tuning Into New Potentials เป็น quantum manifestation meditation ออกจาก 3D reality ปัจจุบัน เข้าสู่ field of infinite potentials เลือก timeline ที่ต้องการ ดึงมาด้วย feeling",m:"Tuning Into New Potentials 40 นาที: นั่งตั้งตรง หายใจลึก ปล่อยร่างกาย เข้าสู่ unknown ตั้งใจว่าจะดึง potential ใหม่เข้ามา",a:"Isn't It Wonderful + I Remember When สลับกันตลอดวัน",e:"Scripting ในฐานะ Her ที่ได้รับ potential นั้นแล้ว",j:"ระหว่างทำ meditation รู้สึกอะไรที่แตกต่าง? มี insight อะไรผุดขึ้นมาไหม?"},
+{day:17,t:"ฝึก Visualization ให้คม",th:"หลายคน visualize แต่ไม่ได้ผลเพราะ 'เห็นภาพจากภายนอก' (3rd person) Neville เน้นว่าต้องเห็นโลกจากสายตาของ Her ในฐานะ 1st person เท่านั้น",m:"Visualization Training 30 นาที: 1st person perspective ทั้งหมด เห็นมือของ Her เห็นห้องจากมุมมองของเธอ | Heart Coherence 10 นาที",a:"ทุกครั้งที่นึกถึง Her ให้นึกใน 1st person ไม่ใช่ 3rd",e:"SATS เน้น 1st person scene",j:"ความแตกต่างระหว่าง 1st vs 3rd person visualization รู้สึกยังไง? อันไหน feel จริงกว่า?"},
+{day:18,t:"Emotional Signature — หา Feeling ที่ใช่",th:"ไม่ใช่ทุก elevated emotion ที่จะทำงานได้กับทุกคน บางคน gratitude fire ได้ดี บางคน joy หรือ love แรงกว่า วันนี้จะ map emotional signature ของตัวเอง",m:"ทดลองทำ Heart Coherence 3 รอบ แต่ละรอบใช้ emotion ต่างกัน: Gratitude / Love / Joy สังเกต reaction ในร่างกาย",a:"ใช้ emotional signature ที่แรงที่สุด ส่งไปยังชีวิตของ Her ขณะทำกิจกรรมปกติ",e:"BOTEC ใช้ emotional signature ที่พบ",j:"Emotion ไหนที่ generate ได้แรงที่สุดในร่างกาย? ทำไมคิดว่าเป็นอย่างนั้น?"},
+{day:19,t:"Time Collapse — อนาคตคือตอนนี้",th:"Dispenza บอกว่าใน quantum field ไม่มี linear time อนาคตที่ต้องการมีอยู่แล้วในฐานะ potential เมื่อ collapse potential ด้วย observation + feeling มันกลายเป็น reality ปัจจุบัน",m:"Tuning Into New Potentials 30 นาที เน้นที่ความรู้สึกว่า 'มันมีอยู่แล้ว ตอนนี้' | Heart Coherence 10 นาที",a:"ดำเนิน Living in the End เต็มวัน ทุก decision ทุก conversation",e:"SATS scene ที่เลือก | I Remember When ก่อนหลับ",j:"ถ้า Her มีชีวิตอยู่ตอนนี้ วันนี้เธอทำอะไรต่างจากที่ฉันทำ?"},
+{day:20,t:"Handling Doubt — เมื่อไม่เชื่อ",th:"Doubt คือ feedback ไม่ใช่ failure มันบอกว่ายังมี belief ที่ conflict อยู่ Neville บอกว่าอย่า fight doubt แต่ให้ redirect attention ไปที่ evidence ที่ต้องการแทน",m:"Focus Wheel ทำกับ doubt ที่มีอยู่ตอนนี้ | Heart Coherence 10 นาที",a:"ทุกครั้งที่ doubt ผุดขึ้น พูด Isn't It Wonderful แทน",e:"Rampage of Appreciation เน้นที่ evidence เล็ก ๆ ที่ Her เริ่ม show up แล้ว",j:"Doubt ที่เจอบ่อยที่สุดคืออะไร? ถ้า Her ได้ยิน doubt นั้น เธอจะตอบยังไง?"},
+{day:21,t:"Weekly Review — สัปดาห์ที่ 3",th:"ทบทวน Week 3: Visualization คมขึ้นไหม? SATS รู้สึกต่างจากสัปดาห์แรกไหม? ตรวจ emotional signature ถ้ายังไม่แน่ใจ",m:"Mental Rehearsal full 40 นาที | Tuning Into New Potentials",a:"Scripting เขียน Her Journal: วันในชีวิตของ Her ที่สมบูรณ์",e:"SATS ก่อนนอน scene ที่ชัดเจนที่สุด",j:"เปรียบเทียบ Her Profile วันที่ 5 กับความรู้สึกตอนนี้ เธอ 'จริง' ขึ้นไหม?",r:true}
+],review:["ฉัน visualize ใน 1st person ได้แล้วโดยไม่ต้องเตือนตัวเอง","ฉันรู้แล้วว่า emotional signature ของตัวเองคืออะไร","ฉันทำ SATS ได้โดยไม่หลับก่อน scene จบ","ฉัน Living in the End ได้อย่างน้อยครึ่งวันในทุกวัน","ฉัน handle doubt ได้โดยไม่ spiral","Mental Rehearsal รู้สึก real กว่าสัปดาห์แรก"]},
+{title:"Week 4 (วัน 22–30): อยู่ใน End State & Integration",
+theory:"<p><strong>Core Concept:</strong> สัปดาห์สุดท้ายคือ integration ทำให้ทุกอย่างที่เรียนมากลายเป็น second nature Her ไม่ใช่เป้าหมาย Her คือตัวตนที่ดำเนินชีวิตอยู่แล้ว</p><p><strong>Technique หลัก:</strong> Morning & Evening Meditations + Living in the End ตลอดวัน + SATS ทุกคืน</p>",
+days:[
+{day:22,t:"Morning Routine ของ Her",th:"วันนี้ set morning routine ของ Her ที่จะทำตลอดชีวิต ไม่ใช่ routine ของ 'ฉันที่กำลังฝึก' แต่คือ routine ของ Her ที่เป็นอยู่แล้ว",m:"Dispenza Morning Meditation 30–40 นาที: gratitude + Heart Coherence + Visualization ชีวิตของ Her | Mirror Work 5 นาที",a:"Segment Intending ทุก segment จาก state ของ Her",e:"Dispenza Evening Meditation 20 นาที | SATS",j:"Morning routine ของ Her เป็นอย่างไร? เธอตื่นมาด้วย feeling อะไร?"},
+{day:23,t:"ภาษาที่ใช้กับตัวเอง",th:"ภาษาที่ใช้กับตัวเองทุกวินาทีเป็น spell ที่ทรงพลังที่สุด 'ฉันพยายามเปลี่ยน' vs 'ฉันเป็นเธอแล้ว' สมองรับ signal ต่างกันอย่างสิ้นเชิง",m:"Heart Coherence 15 นาที | ตรวจ self-talk ตลอดเช้า จดทุกครั้งที่พูด 'กำลัง / พยายาม / หวังว่า'",a:"แปลงทุก statement: 'ฉันกำลัง...' → 'ฉัน...' | 'ฉันอยากเป็น...' → 'ฉันเป็น...'",e:"BOTEC + SATS",j:"ภาษาที่ฉันใช้กับตัวเองวันนี้บอกว่าฉันเป็น Her แล้ว หรือยังเป็น 'คนที่พยายามเป็น Her' อยู่?"},
+{day:24,t:"Evidence vs Faith",th:"Neville บอกว่า Faith คือ evidence of things not seen เชื่อก่อนเห็น ไม่ใช่เห็นก่อนค่อยเชื่อ Her เริ่ม show up ในชีวิตผ่าน micro-signs ที่มักมองข้ามไป",m:"Morning Meditation 30 นาที | เขียน 'Evidence List': สิ่งเล็ก ๆ ที่เห็นว่า Her เริ่มปรากฏ",a:"ทุกครั้งที่เห็น evidence พูดว่า 'ขอบคุณ' และ let go ไม่ hold tight",e:"Revision + SATS",j:"ใน 23 วันที่ผ่านมา Her show up ในชีวิตผ่านสิ่งอะไรบ้าง แม้เล็กน้อยมาก?"},
+{day:25,t:"Surrender — ปล่อยให้ Universe จัดการ",th:"Paradox ของ manifestation: ยิ่ง force มาก ยิ่งได้ช้า เพราะ force = ไม่เชื่อว่ามีแล้ว Abraham Hicks บอกว่า 'Let go of the oars' Surrender ไม่ใช่แพ้ แต่คือความไว้ใจสูงสุด",m:"Tuning Into New Potentials 30 นาที เน้นที่ 'ปล่อยวาง how และ when' | Heart Coherence",a:"ทุกครั้งที่รู้สึก 'ต้องควบคุม' หายใจลึก แล้วพูดว่า 'Universe จัดการแทนฉันได้'",e:"Rampage of Appreciation เต็มรูปแบบ 20 นาที",j:"ฉัน trust Universe แค่ไหน 1–10? อะไรที่ทำให้ยังไม่ trust เต็มที่?"},
+{day:26,t:"Embodiment — ใส่ Her ในทุกการกระทำ",th:"Embodiment ต่างจาก visualization ไม่ใช่แค่เห็นในหัว แต่คือการที่ร่างกาย walk, talk, sit, breathe ในแบบของ Her ทุก gesture ทุก word choice",m:"Morning Meditation 30 นาที | ก่อนลุกจากเตียง breathing exercise ในฐานะ Her",a:"Practice: Her เดินยังไง? นั่งยังไง? พูดกับคนอื่นยังไง? ทำทุกอย่างในแบบของเธอ",e:"Evening Meditation 20 นาที | SATS",j:"ร่างกายของ Her รู้สึกต่างจากร่างกายของ 'ฉัน' ยังไง? เธอ carry herself ยังไง?"},
+{day:27,t:"Her Relationship กับโลก",th:"Her ไม่ได้แค่เปลี่ยนความรู้สึกในตัวเอง เธอเปลี่ยนวิธีที่ relate กับโลกรอบข้างด้วย คนที่มี strong identity ส่ง signal ออกมาชัดเจน คนรอบข้างตอบสนองต่อ energy",m:"Heart Coherence 15 นาที เน้น projecting love ออกไป | Mental Rehearsal 20 นาที: visualize interaction กับคนอื่นในแบบของ Her",a:"สังเกต: วันนี้คนตอบสนองต่อฉันต่างจากปกติไหม?",e:"Scripting เน้นที่ relationship ของ Her กับคนรอบข้าง",j:"Her relate กับคนอื่นต่างจากตัวตนเก่าของฉันยังไง?"},
+{day:28,t:"Integration Day — รวมทุกอย่าง",th:"วันนี้ไม่มี technique ใหม่ ทำ full routine ที่สร้างมาตลอด 27 วัน นี่คือ routine ของ Her ที่จะพาไปต่อหลัง 30 วัน",m:"Full Morning Routine: Mirror Work → Heart Coherence → Morning Meditation → Scripting",a:"Segment Intending ทุก transition | Living in the End ตลอดวัน",e:"BOTEC → Revision → Evening Meditation → SATS",j:"ใน 28 วัน Identity ของฉันเปลี่ยนไปอย่างไร? วัดจากสิ่งที่เป็น ไม่ใช่สิ่งที่ยังอยากได้"},
+{day:29,t:"Letter to Her — จากฉันถึงเธอ",th:"การเขียนจดหมายถึง Her คือการ solidify transformation เป็นการ acknowledge อย่างเป็นทางการว่าเราเห็น เชื่อ และรับ Her เข้ามาแล้ว",m:"Morning Meditation 30 นาที",a:"เขียนจดหมาย 2 ฉบับ: 1) จาก 'ฉัน' ถึง Her ขอบคุณเธอที่มาหา | 2) จาก Her ถึง 'ฉัน' บอกว่าเธอมาถึงแล้ว",e:"อ่านจดหมายทั้งสองดัง ๆ | SATS",j:"อ่าน journal ทั้งหมดตั้งแต่วันที่ 1 เห็นอะไรในการเดินทางนี้?"},
+{day:30,t:"วันสุดท้าย — เธอมาถึงแล้ว",th:"30 วันไม่ใช่จุดสิ้นสุด แต่เป็นจุดเริ่มต้นของชีวิตที่เธอเป็น Her แล้ว Dispenza บอกว่า 'The present moment always will have been'",m:"Full Morning Routine ของ Her | Scripting สุดท้าย: เขียนขอบคุณ Universe ที่ Her มาถึงแล้ว",a:"Celebration Ritual: ทำสิ่งที่ Her จะทำเพื่อ celebrate ตัวเอง",e:"Evening Meditation | SATS final scene | นอนหลับในฐานะ Her",j:"ฉันเป็น Her แล้ว Her จะทำอะไรพรุ่งนี้? วันที่ 31 เริ่มยังไง?",r:true}
+],review:["Morning & Evening Routine ของ Her เป็น default แล้ว ไม่ต้องบังคับตัวเอง","ฉัน refer ถึงตัวเองใน present tense โดยอัตโนมัติ","ฉัน surrender 'how และ when' ได้โดยไม่ anxiety","Embodiment ร่างกายรู้สึกต่างจากวันที่ 1 ชัดเจน","ฉัน handle evidence และ doubt ได้โดยไม่ lose state","ฉันพร้อมใช้ routine นี้ต่อหลัง 30 วัน"]}
+];
+
+const guide={
+base:{label:"🫁 พื้นฐาน",cls:"ct-base",color:"#880e4f",techs:[
+{name:"Box Breathing",when:"ทุกเช้า ก่อนเริ่มทุก meditation",dur:"5–10 นาที",tools:["⏱️ Timer","🪑 เก้าอี้/เสื่อ"],desc:"ควบคุมลมหายใจ 4 ด้าน กระตุ้น parasympathetic nervous system ออกจาก fight-or-flight ก่อน meditation ทุกชนิด",steps:[{l:"นั่งตั้งตรง",d:"นั่งบนเก้าอี้หรือพื้น กระดูกสันหลังตั้ง วางมือบนหน้าขา ปิดตา"},{l:"หายใจเข้า 4 วิ",d:"หายใจเข้าทางจมูกช้า ๆ นับ 1-2-3-4 รู้สึกท้องพอง"},{l:"กลั้น 4 วิ",d:"กลั้นลมหายใจ นับ 1-2-3-4 ไม่เกร็งคอหรือหน้าอก",tip:"ถ้ากลั้น 4 วิไม่ได้ เริ่มที่ 2 วิก่อน แล้วค่อยเพิ่ม"},{l:"หายใจออก 4 วิ",d:"ปล่อยลมออกทางปากช้า ๆ นับ 1-2-3-4 ท้องยุบ"},{l:"กลั้น 4 วิ",d:"กลั้นอีกรอบ นับ 1-2-3-4 ครบ 1 รอบ"},{l:"ทำซ้ำ 10 รอบ",d:"ประมาณ 2.5 นาที สังเกตว่าจิตใจสงบขึ้นหลังรอบที่ 5",tip:"ใช้ app Insight Timer หรือ YouTube 'Box Breathing 10 minutes'"}],mistakes:["หายใจเร็วเกินไป ให้ช้ามาก ๆ จนรู้สึกอยากหายใจมากขึ้น","เกร็งไหล่ขณะกลั้น ผ่อนไหล่ตลอดเวลา"]},
+{name:"การนั่งสมาธิเบื้องต้น",when:"วันที่ 1–3 ก่อนเรียน technique อื่น",dur:"10–20 นาที",tools:["⏱️ Timer","🪑 เก้าอี้/เสื่อ"],desc:"ฝึกสังเกตความคิดโดยไม่ตาม คือรากฐานของ Dispenza ทุก technique ถ้านั่งเฉย ๆ ไม่เป็น การ visualize ก็จะวอกตาม thought แทน",steps:[{l:"ตั้ง Timer",d:"ตั้ง 15 นาที เพื่อไม่ต้องเช็คนาฬิกา"},{l:"Box Breathing ก่อน 5 รอบ",d:"ทำ Box Breathing 5 รอบเพื่อเข้า state"},{l:"โฟกัสที่ลมหายใจ",d:"สังเกตลมหายใจที่ปลายจมูก ความเย็นตอนเข้า ความอุ่นตอนออก ไม่ต้องควบคุม"},{l:"เมื่อใจวอก",d:"ทุกครั้งที่มีความคิดเข้ามา note ว่า 'คิด' แล้วกลับมาที่ลมหายใจ ไม่ตัดสิน",tip:"ยิ่งใจวอกมาก ยิ่ง return ได้บ่อย = ยิ่งฝึกสมองได้มาก"},{l:"ทำจนครบ",d:"นั่งจนครบ timer แม้จะวอก 100 ครั้ง ความสม่ำเสมอสำคัญกว่าความสมบูรณ์แบบ"}],mistakes:["บังคับให้ไม่คิด เป้าหมายคือสังเกต ไม่ใช่หยุดคิด","เช็คนาฬิกาบ่อย ตั้ง timer แล้ววางโทรศัพท์คว่ำ"]}
+]},
+dispenza:{label:"🧠 Joe Dispenza",cls:"ct-d",color:"#0d47a1",techs:[
+{name:"Heart Coherence",when:"ทุกเช้า / เมื่อเครียด",dur:"5–15 นาที",tools:["🖐️ มือซ้าย","⏱️ Timer"],desc:"สร้างความสอดคล้องระหว่างหัวใจและสมองโดยใช้ elevated emotions HeartMath Institute พบว่าเมื่อ coherent สมองทำงานได้ดีขึ้น",steps:[{l:"วางมือซ้ายที่หัวใจ",d:"วางฝ่ามือซ้ายตรงหัวใจ กลางหน้าอกซ้าย ปิดตา"},{l:"หายใจผ่านหัวใจ",d:"จินตนาการว่าหายใจเข้าออกผ่านบริเวณหัวใจ ช้า ๆ เข้า 5 วิ ออก 5 วิ",tip:"จินตนาการว่าหัวใจขยายตอนเข้า และหดตอนออก"},{l:"Generate Elevated Emotion จริง ๆ",d:"นึกถึงคน สัตว์ หรือช่วงเวลาที่ทำให้รู้สึก love/gratitude มากที่สุด ต้องรู้สึกในอก ไม่ใช่แค่คิดถึง",tip:"ถ้านึกไม่ออก ให้นึกถึงสัตว์เลี้ยงหรือเด็กทารก ได้ผลเร็วมาก"},{l:"ขยาย feeling ออกไปรอบ ๆ",d:"จินตนาการว่า feeling นั้นขยายออกจากหัวใจ รอบตัว เหมือน ripple ในน้ำ"},{l:"ทำค้างไว้ 5–15 นาที",d:"อยู่กับ state นี้ ถ้า feeling หายให้ generate ใหม่"}],mistakes:["แค่ 'คิดว่า' grateful ไม่พอ ต้องรู้สึกในร่างกายจริง ๆ","ทำเร็วเกินไป ต้องใช้เวลาอย่างน้อย 3 นาทีให้ร่างกาย shift"]},
+{name:"Breaking the Habit of Being Yourself",when:"Week 1 ทุกเช้า",dur:"30–60 นาที",tools:["🎧 หูฟัง","📱 Audio Dispenza","🪑 เก้าอี้ตัวตรง"],desc:"Meditation หลักสำหรับ identity shift แบ่งเป็น 2 ส่วน: Induction เข้า alpha/theta และ Rewrite ตัวตน",steps:[{l:"เตรียมสถานที่",d:"นั่งบนเก้าอี้ตัวตรง ห้องเงียบ ปิดโทรศัพท์ ใส่หูฟัง ตั้ง timer 45 นาที"},{l:"Box Breathing 10 รอบ",d:"ทำก่อนเสมอ เพื่อออกจาก beta brainwave เข้าสู่ alpha"},{l:"Induction ผ่อนคลายทีละส่วน",d:"เริ่มจากปลายเท้า ค่อย ๆ ผ่อนแรงขึ้นมา ใช้เวลา 10–15 นาที",tip:"ถ้ามี audio Dispenza จะ guide ส่วนนี้ให้เอง"},{l:"ระบุตัวตนเก่า",d:"ถามในหัว: ฉันเชื่ออะไรเกี่ยวกับตัวเอง? reaction อัตโนมัติคืออะไร?"},{l:"ตั้งใจปล่อยวาง",d:"พูดในหัว: 'ฉันปล่อยตัวตนเก่านี้ไป วันนี้ฉันไม่เป็นคนเดิมอีกต่อไป'"},{l:"Step into ตัวตนใหม่",d:"Visualize ตัวเองเป็น Her รู้สึก elevated emotions ของคนที่มี identity ใหม่แล้ว ค้างไว้ให้นาน"}],mistakes:["นอนราบแล้วหลับ ต้องนั่งตั้งตรง","ข้าม Induction เพราะรีบ ถ้าไม่เข้า alpha ส่วนที่เหลือจะไม่ work"]},
+{name:"Blessing of the Energy Centers (BOTEC)",when:"Week 2 ทุกเช้า / เมื่อพลังงานต่ำ",dur:"30–45 นาที",tools:["🎧 หูฟัง","📱 Audio BOTEC","🪑 เก้าอี้"],desc:"เปิด energy centers ทั้ง 7 โดยส่ง elevated emotions ไปยังแต่ละจุด ทำให้ร่างกายออกจาก survival mode สู่ creative mode",steps:[{l:"Box Breathing + Induction 10 นาที",d:"เข้า state ก่อนเสมอ"},{l:"Energy Center ที่ 1 — ฐาน",d:"โฟกัสที่ฐานกระดูกสันหลัง ส่ง gratitude/love ไปที่นั่น รู้สึกว่าบริเวณนั้น 'สว่าง' ขึ้น",tip:"ถ้ามี audio Dispenza จะ guide ทีละ center"},{l:"เลื่อนขึ้นทีละ Center",d:"ฐาน → สะดือ → Solar Plexus → หัวใจ → คอ → หน้าผาก → กระหม่อม ใช้เวลา center ละ 3–5 นาที"},{l:"Energy Center สุดท้าย — กระหม่อม",d:"จินตนาการว่า energy ออกจากร่างกาย connect กับ quantum field รอบตัว"},{l:"Integrate 5 นาที",d:"นั่งเงียบ รู้สึก body energy ทั้งหมด ก่อนลืมตา"}],mistakes:["รีบผ่านแต่ละ center ต้องค้างที่แต่ละจุดจนรู้สึกได้","แค่ 'คิด' ถึง center ไม่ได้ 'ส่ง feeling' ไปที่นั่น"]},
+{name:"Tuning Into New Potentials",when:"Week 3 ทุกเช้า",dur:"30–45 นาที",tools:["🎧 หูฟัง","📱 Audio Dispenza","🪑 เก้าอี้"],desc:"Quantum meditation สำหรับ manifest timeline ใหม่ ออกจาก 3D reality เข้าสู่ field of infinite possibilities",steps:[{l:"Box Breathing + Full Induction 15 นาที",d:"Induction ต้องลึกกว่าปกติ เพราะต้องการ theta brainwave"},{l:"ปล่อยร่างกาย",d:"จินตนาการว่าร่างกายไม่มีตัวตน ลืมว่าตัวเองนั่งอยู่ที่ไหน ลืมเวลา ลืมชื่อตัวเอง",tip:"ถ้าทำได้จะรู้สึก tingling หรือ weightless"},{l:"เข้าสู่ Space of Infinite Potentials",d:"จินตนาการว่าอยู่ในความมืดที่เต็มไปด้วย potential ทุก version ของชีวิต"},{l:"เลือก Potential ที่ต้องการ",d:"ตั้งใจชัดเจน: 'ฉันต้องการ potential ที่ Her เป็นอยู่แล้ว' แค่ intend ไม่ต้อง visualize ชัด"},{l:"ดึงด้วย Elevated Emotion",d:"Generate feeling ว่า potential นั้นเป็นจริงแล้วตอนนี้ ไม่ใช่ future แต่คือ present"},{l:"Gratitude ปิด",d:"ก่อนลืมตา ขอบคุณ Universe ว่า potential นั้นมาถึงแล้ว"}],mistakes:["Visualize ภาพมากเกินไป meditation นี้เน้น intention + feeling ไม่ใช่ภาพ","Induction สั้นเกินไปจะไม่เข้าถึง field"]},
+{name:"Mental Rehearsal",when:"Week 3 ทุกเช้า / ก่อน event สำคัญ",dur:"20–30 นาที",tools:["🪑 ที่นั่ง","📝 เขียน scene ไว้ก่อน"],desc:"Visualize เหตุการณ์อนาคตอย่างละเอียดทุก sense จนสมองเชื่อว่าเกิดขึ้นจริง",steps:[{l:"เตรียม Scene ก่อน (คืนก่อนหน้า)",d:"เขียน scene ให้ชัด: อยู่ที่ไหน? มีใครบ้าง? ทำอะไร? ใช้ 1st person เท่านั้น",tip:"Scene ควรสั้นและชัด 2–3 นาทีก็พอ"},{l:"Box Breathing + Induction 10 นาที",d:"เข้า alpha/theta state ก่อน"},{l:"เข้าสู่ Scene — 1st Person เท่านั้น",d:"เห็นจากสายตาของ Her ไม่ใช่มองดูเธอจากภายนอก เห็นมือของเธอ เห็นห้องจากมุมมองของเธอ"},{l:"ใส่ทุก Sense",d:"ได้ยินอะไร? รู้สึกที่ผิวหนังยังไง? กลิ่นอะไร? รสชาติอะไร?"},{l:"Generate Elevated Emotion ใน Scene",d:"รู้สึก joy/gratitude ใน scene นั้น ไม่ใช่แค่เห็นภาพ"},{l:"Loop Scene 3–5 รอบ",d:"เล่น scene เดิมซ้ำ เหมือน replay หนัง จนรู้สึก familiar"}],mistakes:["Switch มา 3rd person กลางคัน ตรวจสอบตลอดว่าเห็นจากตาของ Her","Scene ไม่มี emotion ให้ pause สร้าง Heart Coherence ก่อน"]}
+]},
+neville:{label:"✨ Neville Goddard",cls:"ct-n",color:"#4a148c",techs:[
+{name:"SATS (State Akin to Sleep)",when:"ทุกคืนก่อนนอน",dur:"10–20 นาที",tools:["🛏️ เตียงนอน","📝 Scene ที่เตรียมไว้"],desc:"ช่วง hypnagogic ก่อนหลับสนิทที่ subconscious เปิดรับมากที่สุด Neville บอกว่าพลังมากกว่า meditation ตอนกลางวัน 10 เท่า",steps:[{l:"เตรียม Scene ก่อนนอน",d:"เลือก 1 scene สั้น ๆ ที่บอกว่า wish fulfilled แล้ว เขียนไว้ก่อน 5 นาที",tip:"Scene ต้องสั้นมาก ประมาณ 30 วิในหัว ไม่ใช่ long story"},{l:"นอนในท่าที่หลับปกติ",d:"นอนในท่าปกติ ไม่ใช่ท่าสมาธิ เพราะต้องการ enter hypnagogic state"},{l:"ผ่อนคลายร่างกายทั้งหมด",d:"ผ่อนทีละส่วน จากเท้าถึงหน้า ให้ร่างกายหนักจมลงในเตียง ใช้เวลา 5 นาที"},{l:"Play Scene ใน 1st Person",d:"เมื่อร่างกายผ่อนคลาย เล่น scene ในหัว เห็นจากสายตาของ Her รู้สึกอารมณ์ใน scene นั้น"},{l:"Loop จนหลับ",d:"เล่น scene เดิมซ้ำ ๆ ช้า ๆ ถ้าใจวอก กลับมาที่ scene เดิม ทำแบบนี้จนหลับ",tip:"อย่า force ถ้า force จะหลับไม่หลับ ให้ 'ลอย' ไปกับ scene"}],mistakes:["เปลี่ยน scene ทุกคืน ต้องใช้ scene เดิมทุกคืนจนกว่าจะ manifest","Scene ยาวเกินไป สมองจะคิดเรื่องอื่นก่อนจบ"]},
+{name:"Revision",when:"ทุกคืน หลังวันที่มีเหตุการณ์ไม่ดี",dur:"5–10 นาที",tools:["📝 Journal (optional)","🛏️ เตียง/เก้าอี้"],desc:"Neville บอกว่าอดีตที่ revise ในจิตใจจะ alter trajectory ของอนาคต ไม่ใช่แค่รู้สึกดีขึ้น แต่เปลี่ยน vibrational state จริง ๆ",steps:[{l:"นึกถึงเหตุการณ์ที่ต้องการ Revise",d:"เลือก 1 เหตุการณ์ในวันนี้ที่รู้สึกแย่"},{l:"Rewrite ในหัว",d:"เล่นซีนนั้นใหม่ในหัว แต่คราวนี้ผลลัพธ์เป็นแบบที่ต้องการ ใช้ 1st person"},{l:"รู้สึกใน Revised Version",d:"Generate elevated emotion ใน version ใหม่ รู้สึก relief, joy หรือ gratitude"},{l:"ทำซ้ำ 2–3 รอบ",d:"เล่น revised scene ซ้ำจนรู้สึก 'นั่นคือสิ่งที่เกิดขึ้นจริง'"},{l:"ปล่อยและ Let Go",d:"หยุดคิดถึงเหตุการณ์เดิม ไม่ return ไปวิเคราะห์อีก"}],mistakes:["Revise แล้วกลับไปโกรธ/เสียใจกับของจริง ต้องตั้งใจว่า revised version คือความจริง","ทำเร็วเกินไป ต้องรู้สึกใน revised version จริง ๆ"]},
+{name:"Living in the End",when:"ตลอดวัน (state of being)",dur:"ตลอดวัน",tools:["🧠 ความตั้งใจ","📝 Her Profile"],desc:"ไม่ใช่ visualization แต่คือ state ดำเนินชีวิตทุกวินาทีในฐานะ Her ที่มีสิ่งนั้นแล้ว",steps:[{l:"ทบทวน Her Profile ทุกเช้า",d:"อ่าน Her Profile ก่อนเริ่มวัน remind ว่า Her คือใคร"},{l:"ถาม 'Her จะทำอะไร?' ก่อนทุกการกระทำ",d:"ก่อนตอบ message ก่อนกิน ก่อนเลือกอะไร ถามว่า 'Her จะเลือกอะไร?' แล้วทำตามนั้น"},{l:"ใช้ภาษา Present Tense",d:"แทนที่จะพูด 'ฉันอยากเป็น...' ให้พูด 'ฉันเป็น...' ทั้งในหัวและปาก"},{l:"Notice When You Slip",d:"ทุกครั้งที่สังเกตว่า react แบบตัวตนเก่า แค่ note ว่า 'ตัวตนเก่า' แล้วกลับมาเป็น Her",tip:"การสังเกตได้ว่า slip คือสัญญาณว่า Her กำลัง stronger"},{l:"End Day ในฐานะ Her",d:"ก่อนนอน ถามว่า 'วันนี้ Her อยู่กับฉันแค่ไหน?' ไม่ judge แค่ observe"}],mistakes:["คิดว่าต้องทำสมบูรณ์แบบตลอด micro-moments สำคัญกว่า","ลืม Her กลางวัน set reminder ใน phone ทุก 2 ชั่วโมง: 'Who are you right now?'"]},
+{name:"Isn't It Wonderful / I Remember When",when:"ตลอดวัน / เมื่อ doubt เข้ามา",dur:"30 วิ – ตลอดวัน",tools:["🧠 แค่จิตใจ"],desc:"Phrase สั้น ๆ ที่ยก vibrational state เร็วที่สุด ใช้เมื่อ doubt เข้ามาหรือพลังงานต่ำ",steps:[{l:"Isn't It Wonderful",d:"พูดซ้ำในหัวว่า 'Isn't it wonderful!' หรือ 'มันวิเศษมากเลย!' ด้วย genuine feeling",tip:"อย่าพูดแบบ robot ต้องรู้สึกความ wonder จริง ๆ ทุกครั้ง"},{l:"I Remember When",d:"พูดว่า 'ฉันจำได้ว่าตอนที่ยังไม่มี [สิ่งที่ต้องการ] มันรู้สึกยังไง... แต่ตอนนี้...' แล้วรู้สึกถึง end state",tip:"ใช้เมื่อต้องการ anchor ว่า wish fulfilled แล้ว"}],mistakes:["พูดแบบ automatic ไม่มี feeling ต้องหยุดก่อน 2 วิ แล้ว generate feeling ก่อนพูด"]}
+]},
+abraham:{label:"🌊 Abraham Hicks",cls:"ct-a",color:"#1b5e20",techs:[
+{name:"Scripting",when:"ทุกเช้า / Week 2–3",dur:"15–20 นาที",tools:["📓 สมุด journal (ไม่ใช่ digital)","🖊️ ปากกา"],desc:"เขียนจดหมายถึง Universe ในฐานะที่ wish fulfilled แล้ว ใช้ present/past tense เพื่อบอก subconscious ว่ามันเกิดขึ้นจริงแล้ว",steps:[{l:"ทำ Heart Coherence ก่อน 5 นาที",d:"ต้องอยู่ใน elevated state ก่อนเขียน ถ้าเขียนจาก neutral state จะรู้สึกฝืน"},{l:"เขียนหัวจดหมาย",d:"เขียน: 'Dear Universe, ขอบคุณสำหรับทุกอย่างที่เกิดขึ้นแล้ว ฉันรู้สึกขอบคุณมาก ๆ ที่...'"},{l:"เขียนในฐานะ Her ที่มีแล้ว",d:"บรรยายชีวิตของ Her ในปัจจุบัน เธอตื่นเช้ามารู้สึกยังไง วันของเธอเป็นยังไง ใช้ present หรือ past tense เท่านั้น"},{l:"ใส่ Sensory Details",d:"เขียนให้ vivid กลิ่นกาแฟ แสงแดด เสียงรอบข้าง รู้สึกยังไงในร่างกาย"},{l:"ปิดด้วย Gratitude",d:"จบว่า 'ขอบคุณ Universe ที่จัดการทุกอย่างให้สมบูรณ์แบบ ฉันไว้ใจในกระบวนการ'"},{l:"อ่านซ้ำ 1 รอบ",d:"อ่านสิ่งที่เขียนด้วย feeling ราวกับอ่านข่าวดี generate emotion ขณะอ่าน"}],mistakes:["เขียนใน future tense 'ฉันจะมี...' ต้องเป็น present/past: 'ฉันมี...' / 'ฉันได้รับ...'","เขียน wish list ไม่ใช่ letter ต้องเป็น narrative บรรยายชีวิต"]},
+{name:"Rampage of Appreciation",when:"เมื่อพลังงานต่ำ / ก่อน SATS",dur:"10–15 นาที",tools:["📓 Journal","🖊️ ปากกา"],desc:"เขียนสิ่งที่ appreciate ต่อเนื่องไม่หยุด ยก vibration เร็วที่สุด เล็กแค่ไหนก็ได้",steps:[{l:"เปิดสมุดหน้าใหม่",d:"เขียนหัวว่า 'สิ่งที่ฉัน appreciate วันนี้'"},{l:"เขียนไม่หยุด",d:"เขียนอย่างน้อย 20 ข้อ ห้ามหยุดคิดนาน ถ้าคิดไม่ออกเขียน: อากาศ น้ำดื่ม ที่นอน",tip:"เป้าหมายคือ momentum ไม่ใช่ quality ถ้าหยุดคิด momentum จะหาย"},{l:"ขยายแต่ละข้อ",d:"เมื่อเขียนข้อหนึ่ง ขยายต่อว่า 'และฉัน appreciate มันเพราะ...' จะ deepen feeling"},{l:"รู้สึกถึง appreciation จริง ๆ",d:"เป้าหมายไม่ใช่รายการ แต่คือ feeling ถ้ารายการยาวแต่ไม่รู้สึกอะไร ให้หยุดที่ข้อที่รู้สึกแล้ว focus นาน ๆ"}],mistakes:["เขียนเพื่อให้ครบ 20 ข้อโดยไม่รู้สึกอะไร quality of feeling สำคัญกว่า quantity"]},
+{name:"Focus Wheel",when:"เมื่อมี belief ที่ resistant / Week 2",dur:"15–20 นาที",tools:["📓 Journal","🖊️ ปากกา"],desc:"วิธี shift belief ที่ไม่เชื่อ เริ่มจาก statement ที่เชื่อ 100% แล้วค่อย ๆ เลื่อนไปหา belief ที่ต้องการ ทีละขั้น",steps:[{l:"วาดวงกลม 2 วง",d:"วาดวงเล็กตรงกลาง วงใหญ่รอบนอก แบ่งวงใหญ่เป็น 12 ส่วน"},{l:"เขียน Desired Belief ตรงกลาง",d:"เขียนสิ่งที่ต้องการเชื่อ เช่น 'ฉันเป็นคนที่ประสบความสำเร็จและมั่นใจ'"},{l:"เขียน Statement ที่เชื่อ 100% ก่อน",d:"เขียน statement neutral ที่เชื่อได้จริง: 'ฉันมีความสามารถทำสิ่งต่าง ๆ ได้'"},{l:"เลื่อนใกล้ขึ้นทีละขั้น",d:"แต่ละส่วนถัดไปเขียน statement ที่บวกขึ้นนิดหน่อย แต่ยังเชื่อได้",tip:"แต่ละขั้นต้องรู้สึก TRUE ถ้าฝืน ให้ step back"},{l:"ครบ 12 ส่วน",d:"statement สุดท้ายควรใกล้เคียงกับ desired belief มากที่สุดเท่าที่เชื่อได้"},{l:"เลือก 3 Statement ที่แรงที่สุด",d:"เลือก 3 ข้อที่รู้สึกมากที่สุด นำมาพูดซ้ำตลอดวัน"}],mistakes:["เขียน statement ที่ยังไม่เชื่อ จะรู้สึก worse ไม่ใช่ better","ข้ามขั้น ต้องไต่ขึ้นช้า ๆ ทีละขั้น"]},
+{name:"Segment Intending",when:"ก่อนเริ่มทุกกิจกรรมใหม่",dur:"30 วิ – 2 นาที",tools:["🧠 ความตั้งใจเท่านั้น"],desc:"ตั้งใจก่อนเริ่มทุกกิจกรรมใหม่ แต่ละ segment ของวันคือ unit ที่ตั้งใจได้",steps:[{l:"สังเกต Transition",d:"ทุกครั้งที่เปลี่ยนกิจกรรม ก่อนกิน ก่อน call ก่อนออกจากบ้าน ก่อนนอน"},{l:"หยุด 30 วินาที",d:"หยุดก่อนเริ่ม กลับมาที่ตัวเอง"},{l:"ตั้งใจ Segment นี้",d:"พูดในหัว: 'ใน [กิจกรรมนี้] ฉันต้องการรู้สึก [___] และต้องการให้ผลลัพธ์คือ [___]'"},{l:"เริ่มจาก Intended State",d:"เริ่มกิจกรรมนั้นจาก state ที่ตั้งใจ ไม่ใช่ drag state เดิมเข้าไป"}],mistakes:["ลืมทำเพราะรีบ ตั้ง reminder ใน phone ทุก 2 ชั่วโมง 'Intend your next segment'"]}
+]},
+louise:{label:"🪞 Louise Hay",cls:"ct-l",color:"#e65100",techs:[
+{name:"Mirror Work",when:"ทุกเช้า ก่อนออกจากห้องน้ำ",dur:"3–10 นาที",tools:["🪞 กระจกที่มองเห็นตาได้","💡 แสงที่ดี"],desc:"Louise Hay บอกว่ากระจกสะท้อนความเชื่อที่มีต่อตัวเอง เมื่อมองตาตัวเองและพูดสิ่งดี ๆ สมองรับ signal แรงกว่า affirmation ทั่วไปมาก",steps:[{l:"ยืนหน้ากระจกในระดับตา",d:"ยืนใกล้กระจกพอที่จะมองตาตัวเองได้ชัด แสงต้องดีพอ"},{l:"มองตาตัวเอง อย่าหลบ",d:"มองตาในกระจกตรง ๆ ถ้ารู้สึก uncomfortable นั่นคือสัญญาณว่า self-worth ยังต้องฝึก"},{l:"Week 1: แค่สังเกต",d:"วันแรก ๆ แค่มองตาตัวเองโดยไม่ judge สังเกตว่ารู้สึกอะไร",tip:"ถ้ารู้สึก awkward มาก ให้เริ่มที่ 1 นาทีก่อน"},{l:"Week 2+: พูด Affirmation ในฐานะ Her",d:"พูดว่า 'ฉัน [ชื่อ] รักและยอมรับตัวเองอย่างที่เป็น' หรือ affirmation ของ Her ที่เตรียมไว้"},{l:"สังเกต Resistance",d:"ถ้ารู้สึก 'ไม่จริง' หรือ 'โกหก' นั่นคือ belief เก่ากำลังต้าน เขียนลงใน journal"},{l:"ปิดด้วยรอยยิ้ม",d:"ยิ้มให้ตัวเองในกระจกก่อนจากไป แม้จะฝืนนิดหน่อย"}],mistakes:["พูดโดยไม่มอง ต้องมองตาในกระจกเท่านั้น จึงจะได้ผล","ทำเร็วเกินไป ต้องอยู่กับความรู้สึกที่เกิดขึ้นจริง ๆ"]}
+]}
+};
+
+// ===== COURSE LOGIC =====
+const wCols=['#1565c0','#6a1b9a','#2e7d32','#e65100'];
+let cW=0,cD=0;
+const checks={};
+
+function showSec(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');
+  document.getElementById('nav-course').classList.toggle('active',id==='course');
+  document.getElementById('nav-guide').classList.toggle('active',id==='guide');
+}
+
+function switchWeek(w){
+  cW=w; cD=0;
+  [0,1,2,3].forEach(i=>{
+    const el=document.getElementById('wt'+i);
+    el.className='wt'+i+(i===w?' on':'');
+  });
+  renderOv(); renderScroll(); renderCard();
+}
+
+function renderOv(){
+  const w=weeks[cW];
+  document.getElementById('week-ov').innerHTML=`<div class="wo wo${cW}"><h3>${w.title}</h3>${w.theory}</div>`;
+}
+
+function renderScroll(){
+  const w=weeks[cW];
+  document.getElementById('day-scroll').innerHTML=w.days.map((d,i)=>
+    `<button class="db${cW}${i===cD?' on':''}" onclick="switchDay(${i})">${d.day}</button>`
+  ).join('');
+}
+
+function switchDay(i){
+  cD=i; renderScroll(); renderCard();
+}
+
+function renderCard(){
+  const w=weeks[cW]; const d=w.days[cD]; const col=wCols[cW];
+  let html=`<div class="day-card">
+    <div class="day-title">วันที่ ${d.day}: ${d.t}</div>
+    <div class="lbl">ทฤษฎีวันนี้</div>
+    <div class="theory-box">${d.th}</div>
+    <div class="lbl">ปฏิบัติ</div>
+    <div class="prac-col">
+      <div class="pi pi-m"><b>🌅 เช้า</b>${d.m}</div>
+      <div class="pi pi-a"><b>☀️ กลางวัน</b>${d.a}</div>
+      <div class="pi pi-e"><b>🌙 คืน</b>${d.e}</div>
+    </div>
+    <div class="lbl">Journal Prompt</div>
+    <div class="jbox">✍️ ${d.j}</div>`;
+  if(d.r){
+    html+=`<div class="review-box"><h4>✅ Weekly Checklist</h4>`;
+    w.review.forEach((r,i)=>{
+      const key=`${cW}-${i}`;
+      const on=checks[key]?' on':'';
+      html+=`<div class="ck-row"><button class="ck${on}" id="ck${key}" onclick="toggleCk(${cW},${i})">${checks[key]?'✓':''}</button><span>${r}</span></div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`<div class="nav-row" style="margin-top:16px">
+    <button onclick="navDay(-1)" ${cD===0?'disabled':''}>← ก่อนหน้า</button>
+    <span>วันที่ ${d.day} / 30</span>
+    <button onclick="navDay(1)" ${cD===w.days.length-1?'disabled':''}>ถัดไป →</button>
+  </div></div>`;
+  document.getElementById('day-card').innerHTML=html;
+}
+
+function navDay(dir){
+  const w=weeks[cW]; const nd=cD+dir;
+  if(nd<0){if(cW>0){switchWeek(cW-1);cD=weeks[cW].days.length-1;renderScroll();renderCard();}return;}
+  if(nd>=w.days.length){if(cW<3)switchWeek(cW+1);return;}
+  switchDay(nd);
+}
+
+function toggleCk(w,i){
+  const key=`${w}-${i}`;
+  checks[key]=!checks[key];
+  renderCard();
+}
+
+// ===== GUIDE LOGIC =====
+const cats=Object.keys(guide);
+let gCat='base';
+
+function renderCatTabs(){
+  document.getElementById('cat-tabs').innerHTML=cats.map(c=>
+    `<button class="${guide[c].cls}${c===gCat?' on':''}" onclick="switchCat('${c}')">${guide[c].label}</button>`
+  ).join('');
+}
+
+function renderTechList(){
+  const cat=guide[gCat];
+  document.getElementById('tech-list').innerHTML=cat.techs.map((t,i)=>
+    `<button onclick="openTech(${i})" style="border-color:${cat.color}">
+      <div class="tname">${t.name}</div>
+      <div class="twhen">⏰ ${t.when} · ${t.dur}</div>
+    </button>`
+  ).join('');
+}
+
+function switchCat(c){gCat=c;renderCatTabs();renderTechList();}
+
+function openTech(i){
+  const cat=guide[gCat]; const t=cat.techs[i]; const col=cat.color;
+  let html=`<div class="detail-card">
+    <div class="detail-title">${t.name}</div>
+    <div class="detail-meta">⏱️ ${t.dur} &nbsp;·&nbsp; 📌 ${t.when}</div>
+    <div class="desc-box">${t.desc}</div>
+    <div class="tools-row">${t.tools.map(x=>`<span class="tool">${x}</span>`).join('')}</div>
+    <div class="lbl" style="margin-bottom:12px">ขั้นตอนการทำ</div>`;
+  t.steps.forEach((s,idx)=>{
+    html+=`<div class="step">
+      <div class="snum" style="background:${col}">${idx+1}</div>
+      <div class="sbody">
+        <div class="slbl">${s.l}</div>
+        <div class="sdet">${s.d}</div>
+        ${s.tip?`<div class="stip">💡 ${s.tip}</div>`:''}
+      </div>
+    </div>`;
+  });
+  if(t.mistakes){
+    html+=`<div class="mistakes"><h5>⚠️ ข้อผิดพลาดที่พบบ่อย</h5>
+      ${t.mistakes.map(m=>`<p>⚠️ ${m}</p>`).join('')}
+    </div>`;
+  }
+  html+=`</div>`;
+  document.getElementById('gdetail-content').innerHTML=html;
+  document.getElementById('glist').style.display='none';
+  document.getElementById('gdetail').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function backToList(){
+  document.getElementById('glist').style.display='block';
+  document.getElementById('gdetail').style.display='none';
+}
+
+// ===== INIT =====
+switchWeek(0);
+renderCatTabs();
+renderTechList();
+</script>
+</body>
+</html>
