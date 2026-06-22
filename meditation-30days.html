@@ -8,6 +8,13 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,sans-serif;background:#f5f5f7;color:#1a1a2e;font-size:15px;}
 button{font-family:inherit;cursor:pointer;border:none;outline:none;}
+#lock-screen{position:fixed;inset:0;background:#1a1a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:32px;}
+#lock-screen h2{color:#fff;font-size:22px;margin-bottom:8px;}
+#lock-screen p{color:#aaa;font-size:14px;margin-bottom:32px;}
+#lock-screen input{width:100%;max-width:280px;padding:16px;border-radius:14px;border:2px solid #333;background:#111;color:#fff;font-size:28px;text-align:center;letter-spacing:8px;margin-bottom:16px;outline:none;}
+#lock-screen input:focus{border-color:#6a1b9a;}
+#lock-screen button{width:100%;max-width:280px;padding:16px;border-radius:14px;background:#6a1b9a;color:#fff;font-size:16px;font-weight:700;}
+#lock-screen .err{color:#f44336;font-size:13px;margin-top:12px;height:18px;}
 
 /* NAV */
 .main-nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e0e0e0;display:flex;}
@@ -105,12 +112,21 @@ button{font-family:inherit;cursor:pointer;border:none;outline:none;}
 </head>
 <body>
 
-<nav class="main-nav">
+<div id="lock-screen">
+  <h2>📿 หลักสูตร 30 วัน</h2>
+  <p>ใส่รหัสผ่านเพื่อเข้าใช้งาน</p>
+  <input type="password" id="pw-input" placeholder="·····" maxlength="10" onkeydown="if(event.key==='Enter')unlock()">
+  <button onclick="unlock()">เข้าใช้งาน</button>
+  <div class="err" id="pw-err"></div>
+</div>
+
+<nav class="main-nav" id="app" style="display:none">
   <button class="active" id="nav-course" onclick="showSec('course')">📿 หลักสูตร 30 วัน</button>
   <button id="nav-guide" onclick="showSec('guide')">📖 คู่มือวิธีทำ</button>
 </nav>
 
-<!-- COURSE -->
+<!-- COURSE (hidden until unlock) -->
+<div id="main-content" style="display:none">
 <div id="sec-course" class="sec on">
   <div class="ph"><h1>หลักสูตร 30 วัน</h1><p>Meditation & Manifestation | เป้าหมาย: เปลี่ยน Identity | 60–90 นาที/วัน</p></div>
   <div class="week-tabs">
@@ -359,6 +375,26 @@ function backToList(){
 switchWeek(0);
 renderCatTabs();
 renderTechList();
+
+// ===== LOCK =====
+function unlock(){
+  const pw=document.getElementById('pw-input').value;
+  if(pw==='55555'){
+    document.getElementById('lock-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('main-content').style.display='block';
+    sessionStorage.setItem('unlocked','1');
+  } else {
+    document.getElementById('pw-err').textContent='รหัสผ่านไม่ถูกต้อง';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+if(sessionStorage.getItem('unlocked')==='1'){
+  document.getElementById('lock-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('main-content').style.display='block';
+}
 </script>
 </body>
 </html>
